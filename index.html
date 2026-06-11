@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyunjung Jee | DXP Lab</title>
+    <title>지현정 | Portfolio</title>
     <!-- 폰트어썸 (아이콘) 무료 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 구글 폰트 (Pretendard 대체용 널리 쓰이는 Noto Sans KR) -->
@@ -11,15 +11,16 @@
     
     <style>
         :root {
-            /* 건양대학교 메인 그린 컬러 톤 적용 */
-            --primary-color: #004492; 
-            --primary-light: #00459e;
-            --primary-dark: #00367e;
-            --text-color: #333333;
-            --text-light: #666666;
-            --bg-color: #f4f7f6;
+            /* 부드러운 파스텔 블루 테마 */
+            --primary-color: #5DA9E9; 
+            --primary-light: #E1F5FE;
+            --primary-dark: #4682B4;
+            --accent-color: #A2D2FF;
+            --text-color: #2C3E50;
+            --text-light: #546E7A;
+            --bg-color: #F8FBFF;
             --white: #ffffff;
-            --transition: all 0.3s ease;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         * {
@@ -29,10 +30,11 @@
         }
 
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
+            word-break: keep-all;
             padding-top: 70px; /* 네비게이션 바 높이만큼 여백 */
         }
 
@@ -47,69 +49,163 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
+            padding: 0 5%;
+            height: 70px;
             z-index: 1000;
         }
 
         .nav-logo {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--primary-color);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+        }
+
+        /* 햄버거 메뉴 아이콘 설정 */
+        .menu-icon {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            cursor: pointer;
+            padding: 10px;
+            transition: var(--transition);
+        }
+
+        #menu-toggle {
+            display: none; /* 체크박스 숨김 */
         }
 
         .nav-links {
+            position: absolute;
+            top: 75px;
+            right: 5%;
+            background-color: var(--white);
             list-style: none;
+            display: none; /* 기본적으로 숨김 */
+            flex-direction: column;
+            gap: 5px;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--primary-light);
+            min-width: 180px;
+        }
+
+        /* 체크박스가 체크되었을 때 메뉴 표시 */
+        #menu-toggle:checked ~ .nav-links {
             display: flex;
-            gap: 20px;
+            animation: fadeInDown 0.4s ease forwards;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--text-color);
             font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 10px;
             transition: var(--transition);
+            display: block;
         }
 
         .nav-links a:hover {
-            background-color: var(--bg-color);
+            background-color: var(--primary-light);
             color: var(--primary-color);
         }
 
-        .nav-links a.active {
-            background-color: var(--primary-color);
-            color: var(--white);
+        /* 애니메이션 효과 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 스크롤 시 나타날 네비게이션 프로필 설정 */
+        .nav-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            cursor: pointer;
+        }
+
+        .navbar.scrolled .nav-profile {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .nav-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-light);
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: var(--white);
-            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #ffffff 20%, var(--primary-light) 100%);
+            color: var(--text-color);
+            padding: 10rem 2rem 6rem;
             text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
         }
 
         .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            letter-spacing: -1px;
         }
+
+        .hero-img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin-bottom: 1.5rem; border: 5px solid var(--white); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         .hero .role {
             font-size: 1.2rem;
             opacity: 0.9;
             margin-bottom: 2rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-about {
+            max-width: 800px;
+            margin: 2rem auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
         }
 
         .container {
             max-width: 1100px;
-            margin: -3rem auto 3rem;
+            margin: 4rem auto;
             padding: 0 20px;
             position: relative;
+        }
+
+        /* 섹션 간의 여백 확대 */
+        section {
+            margin-bottom: 7rem;
         }
 
         /* About Section */
@@ -120,6 +216,31 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             margin-bottom: 3rem;
             text-align: center;
+        }
+
+        /* Vision Section Specific Styling */
+        .vision-card {
+            background: var(--white);
+            padding: 3.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+            border-top: 4px solid var(--primary-color);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .vision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(93, 169, 233, 0.15);
+        }
+
+        .vision-card .quote-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
         }
 
         .about-card h2 {
@@ -138,7 +259,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-top: 2rem;
         }
 
         .card {
@@ -150,8 +271,15 @@
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(93, 169, 233, 0.3);
+            border: 1px solid var(--primary-color);
+        }
+
+        /* 카드 내부 아이콘 애니메이션 */
+        .card:hover .card-content i {
+            transform: scale(1.2) rotate(5deg);
+            transition: var(--transition);
         }
 
         .card-img {
@@ -162,6 +290,7 @@
 
         .card-content {
             padding: 1.5rem;
+            text-align: center;
         }
 
         .card-content i {
@@ -191,8 +320,9 @@
 
         .contact-links {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
             margin-top: 1.5rem;
         }
 
@@ -226,12 +356,100 @@
             background: var(--primary-dark);
         }
 
+        .section-footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
         footer {
             text-align: center;
             padding: 2rem 0;
             color: var(--text-light);
             font-size: 0.9rem;
             border-top: 1px solid #e2e8f0;
+        }
+
+        /* Courses 섹션 디자인 개선 */
+        .course-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .course-item {
+            background-color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid var(--primary-light);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .course-item:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        /* Activities 아코디언 스타일 */
+        .activity-accordion {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--primary-light);
+            overflow: hidden; /* 내부 항목의 모서리를 부모에 맞춤 */
+        }
+
+        .activity-item {
+            transition: var(--transition);
+            border-bottom: 1px solid var(--primary-light);
+            background: var(--white);
+        }
+
+        .activity-item:hover {
+            background-color: #fcfdfe;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item summary {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            font-weight: 700;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-dark);
+            outline: none;
+        }
+
+        .activity-item summary::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            transition: transform 0.3s ease;
+        }
+
+        .activity-item[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .activity-content {
+            padding: 0 2rem; 
+            text-align: left;
+            background-color: #fafcfe;
+            color: var(--text-color);
+            max-height: 0; 
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            opacity: 0;
         }
     </style>
 </head>
@@ -240,88 +458,277 @@
 <!-- Top Navigation -->
 <nav class="navbar">
     <a href="#" class="nav-logo">
-        <i class="fa-solid fa-vr-cardboard"></i> DXP Lab
+        <i class="fa-solid fa-graduation-cap"></i> Student Portfolio
     </a>
+    
+    <!-- 스크롤 시 중앙에 나타날 프로필 -->
+    <div class="nav-profile" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <img src="프로필.jpg" alt="지현정">
+        <span style="font-weight: 700; color: var(--text-color);">지현정</span>
+    </div>
+
+    <!-- 햄버거 메뉴를 위한 토글 버튼 -->
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="menu-icon">
+        <i class="fa-solid fa-bars"></i>
+    </label>
+
     <ul class="nav-links">
-        <li><a href="#" class="active"><i class="fa-solid fa-wand-magic-sparkles"></i> 현재 페이지 (Modern)</a></li>
-        <!-- 이전 페이지 파일명을 old.html 혹은 previous.html 로 맞추어 학생들에게 링크 이동을 시연하시면 됩니다 -->
-        <li><a href="index_initial.html"><i class="fa-solid fa-clock-rotate-left"></i> 이전 페이지 (Basic)</a></li>
+        <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#about"><i class="fa-solid fa-user"></i> About</a></li>
+        <li><a href="projects.html"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
+        <li><a href="activities.html"><i class="fa-solid fa-star"></i> Activities</a></li>
+        <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
     </ul>
 </nav>
 
 <!-- Hero Section -->
 <header class="hero">
-    <h1>Hyunjung Jee</h1>
-    <p class="role">Professor & Director of DXP Lab</p>
+    <img src="프로필.jpg" alt="지현정 프로필" class="hero-img">
+    <h1>지현정</h1>
+    
+    <!-- About Me가 Hero 섹션 안으로 이동 -->
+    <div class="hero-about">
+        <div class="info-item">
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-university"></i> 소속</div>
+            <div style="font-size: 0.95rem;">건양대학교 국방XR학부 26학번</div>
+        </div>
+        <div class="info-item">
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-heart"></i> 관심 분야</div>
+            <div style="font-size: 0.95rem;">SW, 디자인, 게임 프로그래밍</div>
+        </div>
+        <div class="info-item">
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-bolt"></i> 강점</div>
+            <div style="font-size: 0.95rem;">긍정적인 마인드와 끈기</div>
+        </div>
+    </div>
 </header>
 
-<main class="container">
-    <!-- About Section -->
-    <section class="about-card">
-        <h2><i class="fa-solid fa-user-tie"></i> About Me</h2>
-        <p>
-            인간과 컴퓨터의 상호작용(HCI)을 연구하며, 가상현실(VR) 및 증강현실(AR) 환경에서의 
-            사용자 경험 개선과 <strong>사이버멀미(Cybersickness) 저감 기술</strong>에 집중하고 있습니다. 
-            데이터 전처리 및 분석 역량을 바탕으로 국방(National Defense) 및 의료 등 다양한 도메인을 위한 초실감형 몰입 기술을 탐구합니다.
-        </p>
+<main class="container">  
+    <!-- Vision Section -->
+    <section id="vision">
+        <h2 class="section-title"><i class="fa-solid fa-eye"></i> Vision</h2>
+        <div class="vision-card">
+            <i class="fa-solid fa-quote-left quote-icon"></i>
+            <h3 style="font-size: 1.6rem; color: var(--primary-dark); margin-bottom: 1.5rem; font-weight: 700;">"더 나은 사람이 되기 위해 노력하는 사람"</h3>
+            <p style="font-size: 1.1rem; color: var(--text-color); line-height: 1.9; word-break: keep-all;">
+                어제보다 더, 오늘보다 더 나은 사람이 되기를 바랍니다.<br>
+                더 다양한것을 알고 더 발전할 줄 아는 제가 될 수 있도록 노력하겠습니다.
+            </p>
+        </div>
     </section>
 
-    <h2 class="section-title">Research Interests</h2>
-    
-    <!-- Cards Section -->
-    <section class="card-grid">
-        <!-- Card 1 -->
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=600&q=80" alt="VR Headset" class="card-img">
-            <div class="card-content">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h3>XR for National Defense</h3>
-                <p>국방 훈련을 위한 초실감형 메타버스 인터페이스 연구 및 인공지능 기반 인간 검증 데이터셋 구축.</p>
-            </div>
-        </article>
+    <!-- Courses Section -->
+    <section id="courses">
+        <h2 class="section-title"><i class="fa-solid fa-book"></i> Courses</h2>
+        <div class="course-list">
+            <div class="course-item">✔ 메타버스 프로그래밍 (Python)</div>
+            <div class="course-item">✔ 실감미디어 컴퓨팅개론</div>
+            <div class="course-item">✔ XR 문화지형도</div>
+            <div class="course-item">✔ 경영학 입문</div>
+            <div class="course-item">✔ 연극의 이해</div>
+        </div>
+    </section>
 
-        <!-- Card 2 -->
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Data Analysis" class="card-content-img card-img">
-            <div class="card-content">
-                <i class="fa-solid fa-eye"></i>
-                <h3>Cybersickness Mitigation</h3>
-                <p>시선 추적(Eye-tracking) 및 시각/햅틱 피드백을 활용한 자율주행 및 VR 환경 내 사이버멀미 분석 및 저감 솔루션.</p>
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Projects</h2>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-content">
+                    <h3>포트폴리오 홈페이지 제작</h3>
+                    <p><strong>역할:</strong> 기획 및 UI/UX 개발 (1인)</p>
+                    <p><strong>결과물:</strong> HTML/CSS 기반의 반응형 개인 웹사이트</p>
+                </div>
             </div>
-        </article>
+            <div class="card">
+                <div class="card-content">
+                    <h3>로블록스 앱 제작</h3>
+                    <p><strong>역할:</strong> 맵 제작 및 스크립트 설정</p>
+                    <p><strong>결과물:</strong> 인사이드 아웃 영화 기반 로블록스 앱</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <h3>XR 콘텐츠 기획안 제작</h3>
+                    <p><strong>역할:</strong> 자료조사 및 기획안 작성 및 피피티 제작 및 발표(조원 단체)</p>
+                    <p><strong>결과물:</strong> 오악사 관련 XR 콘텐츠 기획안</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Card 3 -->
-        <article class="card">
-            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Medical Technology" class="card-img">
-            <div class="card-content">
-                <i class="fa-solid fa-bed-pulse"></i>
-                <h3>Digital Therapeutics</h3>
-                <p>병상 환자(Bedridden Patients) 및 교통약자를 위한 VR 기반 치료/편의 기술 및 상호작용 인터페이스 설계.</p>
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2 class="section-title"><i class="fa-solid fa-gears"></i> Skills</h2>
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <i class="fa-brands fa-python" style="font-size: 2.5rem; color: #3776AB;"></i>
+                <p>Python</p>
             </div>
-        </article>
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <i class="fa-brands fa-github" style="font-size: 2.5rem; color: #333;"></i>
+                <p>GitHub</p>
+            </div>
+            <div class="card" style="text-align: center; padding: 1rem;">
+                <i class="fa-solid fa-certificate" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+                <p>JLPT N4</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activities Section -->
+    <section id="activities">
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> Activities</h2>
+        <div class="activity-accordion">
+            <details class="activity-item">
+                <summary>동아리</summary>
+                <div class="activity-content">
+                    <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="white-space: nowrap;">📅 2026.03 ~ 현재:</span>
+                        <div style="display: flex; flex-direction: column;">
+                            <span>디지털콘텐츠학과 과동아리 '예인' 무대팀</span>
+                            <span>건양대 중앙동아리 포토박스</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <details class="activity-item">
+                <summary>특강</summary>
+                <div class="activity-content">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; align-items: flex-start; gap: 8px;">
+                            <span style="white-space: nowrap;">💡 2026. 04. 27:</span>
+                            <span>언리얼엔진 에픽게임즈 특강 수강</span>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 8px;">
+                            <span style="white-space: nowrap;">💡 2026. 04. 29:</span>
+                            <span>Github 오픈소스 특강 수강</span>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 8px;">
+                            <span style="white-space: nowrap;">💡 2026. 04. 30:</span>
+                            <span>감성컴퓨팅과 VR 연구 특강 수강</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <details class="activity-item">
+                <summary>학생활동</summary>
+                <div class="activity-content">
+                    <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="white-space: nowrap;">🌱 2026 1학년 1학기:</span>
+                        <div style="display: flex; flex-direction: column;">
+                            <span>건양메이트</span>
+                            <span style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">- 학과 홈페이지 사진 게시 및 학과 인스타그램 관리</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <details class="activity-item">
+                <summary>공모전</summary>
+                <div class="activity-content">
+                    <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="white-space: nowrap;">🏆 2026.06. 05:</span>
+                        <div style="display: flex; flex-direction: column;">
+                            <span>성균관대 x HUSS x 뤼튼 AI 활용 아이디어 공모전 장려상 수상</span>
+                            <span style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">- '안내견 스마트 글래스' 아이디어 기획 및 발표</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+            <details class="activity-item">
+                <summary>발표경험</summary>
+                <div class="activity-content">
+                    <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <span style="white-space: nowrap;">📢 2026 1학년 1학기:</span>
+                        <div style="display: flex; flex-direction: column;">
+                            <span>실감미디어 컴퓨팅개론 - 페이스 아이디</span>
+                            <span>실감미디어 컴퓨팅개론 - 사이버 멀미</span>
+                            <span>메타버스 프로그래밍 - 로블록스 기획발표</span>
+                            <span>XR 콘텐츠 문화지형도 - 백제문화 활용 콘텐츠 기획안</span>
+                            <span>HUSS AI 경진대회 - 길잡이 스마트 글래스</span>
+                            <span style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">- 오악사 관련 XR 콘텐츠 기획안 최종 발표 및 피드백 수렴</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact-section">
-        <h2>Let's Connect</h2>
-        <p style="margin-top: 10px; color: var(--text-light);">연구 협력이나 DXP 연구실에 관심이 있으시다면 언제든 연락주세요.</p>
+    <section id="contact" class="contact-section">
+        <h2 class="section-title" style="justify-content: center;"><i class="fa-solid fa-paper-plane"></i> Let's Connect</h2>
+        <p style="margin-top: 10px; color: var(--text-light);">함께 배우고 성장할 기회가 있다면 언제든 환영입니다!</p>
         <div class="contact-links">
-            <a href="mailto:example@korea.ac.kr" class="btn btn-fill">
-                <i class="fa-solid fa-envelope"></i> Email Me
+            <a href="mailto:26521030@konyang.ac.kr" class="btn btn-fill">
+                <i class="fa-solid fa-envelope"></i> EMail (26521030@konyang.ac.kr)
             </a>
-            <a href="https://github.com" class="btn btn-outline" target="_blank">
-                <i class="fa-brands fa-github"></i> GitHub
+            <a href="https://github.com/jeehj116" class="btn btn-outline" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub (github.com/jeehj116)
             </a>
-            <a href="#" class="btn btn-outline">
-                <i class="fa-solid fa-globe"></i> Lab Website
+            <a href="https://www.instagram.com/j_hj.07?igsh=bG5sOTU1MWIzOGY4" class="btn btn-outline" target="_blank">
+                <i class="fa-brands fa-instagram"></i> SNS (@J_HJ.07)
             </a>
         </div>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2026 Hyunjung Jee & DXP Lab. All rights reserved.</p>
+    <p>&copy; 2024 지현정. All rights reserved.</p>
 </footer>
+
+<script>
+    // 스크롤 감지하여 네비게이션 바 상태 변경
+    const navbar = document.querySelector('.navbar');
+    const heroSection = document.querySelector('.hero');
+
+    window.addEventListener('scroll', () => {
+        // Hero 섹션의 절반 정도 지났을 때 효과 적용
+        if (window.scrollY > 300) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Activities 아코디언 부드러운 애니메이션
+    document.querySelectorAll('.activity-item').forEach(details => {
+        const summary = details.querySelector('summary');
+        const content = details.querySelector('.activity-content');
+
+        summary.addEventListener('click', (e) => {
+            e.preventDefault(); // 기본 열림/닫힘 동작 방지
+            
+            const isOpen = details.hasAttribute('open');
+
+            if (isOpen) {
+                // 닫을 때
+                content.style.maxHeight = content.scrollHeight + 'px';
+                content.style.opacity = '1';
+                requestAnimationFrame(() => {
+                    content.style.maxHeight = '0';
+                    content.style.padding = '0 2rem';
+                    content.style.opacity = '0';
+                });
+                content.addEventListener('transitionend', () => {
+                    details.removeAttribute('open');
+                }, { once: true });
+            } else {
+                // 열 때
+                details.setAttribute('open', '');
+                content.style.padding = '1.5rem 2rem';
+                content.style.maxHeight = (content.scrollHeight + 48) + 'px'; // 패딩 포함 높이 계산
+                content.style.opacity = '1';
+                
+                content.addEventListener('transitionend', () => {
+                    if (details.hasAttribute('open')) {
+                        content.style.maxHeight = '1000px'; // 충분히 큰 값으로 고정하여 잘림 방지
+                    }
+                }, { once: true });
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
