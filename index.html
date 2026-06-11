@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
+        html { scroll-behavior: smooth; }
         :root {
             /* 부드러운 파스텔 블루 테마 */
             --primary-color: #5DA9E9; 
@@ -474,16 +475,16 @@
     </label>
 
     <ul class="nav-links">
-        <li><a href="index.html"><i class="fa-solid fa-house"></i> Home</a></li>
-        <li><a href="#about"><i class="fa-solid fa-user"></i> About</a></li>
-        <li><a href="projects.html"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
-        <li><a href="activities.html"><i class="fa-solid fa-star"></i> Activities</a></li>
+        <li><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="#vision"><i class="fa-solid fa-eye"></i> Vision</a></li>
+        <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
+        <li><a href="#activities"><i class="fa-solid fa-star"></i> Activities</a></li>
         <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
     </ul>
 </nav>
 
 <!-- Hero Section -->
-<header class="hero">
+<header class="hero" id="hero">
     <img src="프로필.jpg" alt="지현정 프로필" class="hero-img">
     <h1>지현정</h1>
     
@@ -681,6 +682,16 @@
     // 스크롤 감지하여 네비게이션 바 상태 변경
     const navbar = document.querySelector('.navbar');
     const heroSection = document.querySelector('.hero');
+
+    // 드롭다운 메뉴 항목 클릭 시 메뉴 닫기
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            if (menuToggle.checked) {
+                menuToggle.checked = false;
+            }
+        });
+    });
 
     window.addEventListener('scroll', () => {
         // Hero 섹션의 절반 정도 지났을 때 효과 적용
