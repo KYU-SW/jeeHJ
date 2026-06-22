@@ -159,7 +159,12 @@
         .hero {
             background: linear-gradient(135deg, #ffffff 20%, var(--primary-light) 100%);
             color: var(--text-color);
-            padding: 10rem 2rem 6rem;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
             text-align: center;
             border-bottom-left-radius: 50px;
             border-bottom-right-radius: 50px;
@@ -173,7 +178,325 @@
             letter-spacing: -1px;
         }
 
-        .hero-img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; margin-bottom: 1.5rem; border: 5px solid var(--white); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .hero-img-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .hero-img {
+            width: 200px; height: 200px; border-radius: 50%; object-fit: cover;
+            border: 5px solid var(--white);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: grab;
+            user-select: none;
+            position: absolute;
+            left: 0; top: 0;
+            z-index: 10;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .hero-img.dragging {
+            cursor: grabbing;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .hero-img.squish {
+            animation: squishPop 0.5s ease;
+            animation-direction: var(--squish-dir, normal);
+        }
+
+        @keyframes squishPop {
+            0%   { scale: 1 1; }
+            25%  { scale: var(--sx1) var(--sy1); }
+            50%  { scale: var(--sx2) var(--sy2); }
+            75%  { scale: 0.97 1.03; }
+            100% { scale: 1 1; }
+        }
+
+        /* 핀볼 트리거 */
+        .pinball-trigger {
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .pinball-trigger:hover {
+            color: var(--primary-color);
+            text-shadow: 0 0 12px rgba(93,169,233,0.5);
+        }
+
+        /* 핀볼 모달 */
+        .pinball-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .pinball-overlay.active { display: flex; }
+
+        .pinball-modal {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .pinball-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pinball-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .pinball-title { font-size: 1.3rem; font-weight: 700; color: var(--primary-dark); }
+        .pinball-score { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); }
+
+        .pinball-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; color: var(--text-light);
+        }
+        .pinball-close:hover { color: var(--text-color); }
+
+        .pinball-canvas {
+            border-radius: 16px;
+            border: 3px solid var(--primary-light);
+            background: linear-gradient(180deg, #E1F5FE, #F8FBFF);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .pinball-info {
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .pinball-side {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-width: 160px;
+            margin-top: 2.5rem;
+        }
+
+        .pinball-ranking {
+            text-align: left;
+        }
+        .pinball-ranking h4 {
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+        .pinball-rank-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+        .pinball-rank-item:nth-child(even) { background: var(--primary-light); }
+        .pinball-rank-item .rank-medal { font-weight: 700; }
+
+        .pinball-restart {
+            margin-top: 0.8rem;
+            padding: 8px 24px;
+            border: none; border-radius: 30px;
+            background: var(--primary-color); color: var(--white);
+            font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition);
+        }
+        .pinball-restart:hover { background: var(--primary-dark); }
+
+        .pinball-name-form {
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 1rem;
+            background: var(--primary-light);
+            border-radius: 12px;
+        }
+        .pinball-name-form.active { display: flex; }
+        .pinball-name-form label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .pinball-name-form input {
+            padding: 6px 12px;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: inherit;
+        }
+        .pinball-name-form input:focus { border-color: var(--primary-color); }
+        .pinball-name-form button {
+            padding: 6px 16px;
+            border: none; border-radius: 20px;
+            background: var(--primary-color); color: var(--white);
+            font-size: 0.85rem; font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 틱택토 모달 */
+        .ttt-trigger:hover {
+            transform: scale(1.3);
+            color: #e74c7c !important;
+        }
+
+        .ttt-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ttt-overlay.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ttt-modal {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .ttt-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: none; border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .ttt-close:hover { color: var(--text-color); }
+
+        .ttt-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .ttt-status {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            min-height: 1.5rem;
+        }
+
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .ttt-cell {
+            background: var(--primary-light);
+            border: none;
+            border-radius: 12px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ttt-cell:hover:not(.taken) {
+            background: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .ttt-cell.taken { cursor: default; }
+
+        .ttt-cell.x { color: var(--primary-dark); }
+        .ttt-cell.o { color: #e74c7c; }
+
+        .ttt-cell.win-cell {
+            background: var(--primary-color);
+            color: var(--white) !important;
+            animation: winPulse 0.5s ease;
+        }
+
+        @keyframes winPulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .ttt-restart {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 30px;
+            background: var(--primary-color);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ttt-restart:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.4rem;
+            animation: particleBurst 0.8s ease-out forwards;
+        }
+
+        @keyframes particleBurst {
+            0%   { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2) rotate(var(--rot)); }
+        }
 
         .hero .role {
             font-size: 1.2rem;
@@ -485,8 +808,10 @@
 
 <!-- Hero Section -->
 <header class="hero" id="hero">
-    <img src="프로필.jpg" alt="지현정 프로필" class="hero-img">
-    <h1>지현정</h1>
+    <div class="hero-img-wrapper">
+        <img src="프로필.jpg" alt="지현정 프로필" class="hero-img">
+    </div>
+    <h1>지<span class="pinball-trigger">현</span>정</h1>
     
     <!-- About Me가 Hero 섹션 안으로 이동 -->
     <div class="hero-about">
@@ -495,7 +820,7 @@
             <div style="font-size: 0.95rem;">건양대학교 국방XR학부 26학번</div>
         </div>
         <div class="info-item">
-            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-heart"></i> 관심 분야</div>
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-heart ttt-trigger" style="cursor:pointer; transition: transform 0.2s;"></i> 관심 분야</div>
             <div style="font-size: 0.95rem;">SW, 디자인, 게임 프로그래밍</div>
         </div>
         <div class="info-item">
@@ -674,6 +999,41 @@
     </section>
 </main>
 
+<!-- 핀볼 모달 -->
+<div class="pinball-overlay" id="pinballOverlay">
+    <div class="pinball-modal">
+        <button class="pinball-close" id="pinballClose">&times;</button>
+        <div class="pinball-game">
+            <div class="pinball-header">
+                <div class="pinball-title">🏓 Pinball</div>
+                <div class="pinball-score">Score: <span id="pinballScore">0</span></div>
+            </div>
+            <canvas class="pinball-canvas" id="pinballCanvas" width="360" height="550"></canvas>
+        </div>
+        <div class="pinball-side">
+            <div class="pinball-ranking" id="pinballRanking"></div>
+            <div class="pinball-name-form" id="pinballNameForm">
+                <label>🏆 랭킹 등록!</label>
+                <input type="text" id="pinballNameInput" placeholder="닉네임 입력" maxlength="8">
+                <button id="pinballNameSubmit">등록</button>
+            </div>
+            <div class="pinball-info">Q = 왼쪽 플리퍼<br>E = 오른쪽 플리퍼<br>Space = 발사</div>
+            <button class="pinball-restart" id="pinballRestart">다시하기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 틱택토 모달 -->
+<div class="ttt-overlay" id="tttOverlay">
+    <div class="ttt-modal">
+        <button class="ttt-close" id="tttClose">&times;</button>
+        <div class="ttt-title">💙 Tic Tac Toe</div>
+        <div class="ttt-status" id="tttStatus">당신은 ⭕ 입니다. 먼저 시작하세요!</div>
+        <div class="ttt-board" id="tttBoard"></div>
+        <button class="ttt-restart" id="tttRestart">다시하기</button>
+    </div>
+</div>
+
 <footer>
     <p>&copy; 2024 지현정. All rights reserved.</p>
 </footer>
@@ -701,6 +1061,662 @@
             navbar.classList.remove('scrolled');
         }
     });
+
+    // 프로필 사진 물리 드래그 미니게임
+    const heroImg = document.querySelector('.hero-img');
+    const heroEl = document.querySelector('.hero');
+    let dragging = false;
+    let offsetX, offsetY;
+    let posX = 0, posY = 0;
+    let velX = 0, velY = 0;
+    let prevMouseX = 0, prevMouseY = 0;
+    let rotation = 0, rotVel = 0;
+    let animating = false;
+
+    const friction = 0.97;
+    const rotFriction = 0.95;
+    const bounce = -0.6;
+
+    function getHeroBounds() {
+        const heroRect = heroEl.getBoundingClientRect();
+        const wrapperRect = heroImg.parentElement.getBoundingClientRect();
+        const ox = wrapperRect.left - heroRect.left;
+        const oy = wrapperRect.top - heroRect.top;
+        return { minX: -ox, minY: -oy, maxX: heroRect.width - ox - 200, maxY: heroRect.height - oy - 200 };
+    }
+
+    function applyTransform() {
+        heroImg.style.left = posX + 'px';
+        heroImg.style.top = posY + 'px';
+        heroImg.style.rotate = rotation + 'deg';
+        heroImg.style.scale = dragging ? '1.05' : '1';
+    }
+
+    function physicsLoop() {
+        if (dragging) { animating = false; return; }
+
+        velX *= friction;
+        velY *= friction;
+        rotVel *= rotFriction;
+
+        posX += velX;
+        posY += velY;
+        rotation += rotVel;
+
+        const b = getHeroBounds();
+        if (posX < b.minX) { posX = b.minX; velX *= bounce; rotVel += velY * 0.05; }
+        if (posX > b.maxX) { posX = b.maxX; velX *= bounce; rotVel -= velY * 0.05; }
+        if (posY < b.minY) { posY = b.minY; velY *= bounce; rotVel += velX * 0.05; }
+        if (posY > b.maxY) { posY = b.maxY; velY *= bounce; rotVel -= velX * 0.05; }
+
+        applyTransform();
+
+        if (Math.abs(velX) > 0.1 || Math.abs(velY) > 0.1 || Math.abs(rotVel) > 0.1) {
+            requestAnimationFrame(physicsLoop);
+        } else {
+            animating = false;
+        }
+    }
+
+    const emojis = ['💙', '🩵', '🤍', '☁️', '🫧', '❄️', '💎', '🪼'];
+
+    function spawnParticles(cx, cy) {
+        const count = 10 + Math.floor(Math.random() * 6);
+        for (let i = 0; i < count; i++) {
+            const el = document.createElement('span');
+            el.className = 'particle';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+            const dist = 80 + Math.random() * 100;
+            el.style.left = cx + 'px';
+            el.style.top = cy + 'px';
+            el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+            el.style.setProperty('--ty', Math.sin(angle) * dist - 30 + 'px');
+            el.style.setProperty('--rot', (Math.random() - 0.5) * 360 + 'deg');
+            el.style.fontSize = (1 + Math.random() * 0.8) + 'rem';
+            document.body.appendChild(el);
+            el.addEventListener('animationend', () => el.remove());
+        }
+    }
+
+    function startDrag(cx, cy) {
+        dragging = true;
+        velX = 0; velY = 0;
+        offsetX = cx - posX;
+        offsetY = cy - posY;
+        prevMouseX = cx;
+        prevMouseY = cy;
+        heroImg.classList.add('dragging');
+
+        // 클릭 시 귀여운 이펙트
+        const rect = heroImg.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        spawnParticles(centerX, centerY);
+        heroImg.classList.remove('squish');
+        const r = Math.random();
+        if (r < 0.33) {
+            heroImg.style.setProperty('--sx1', '0.8');
+            heroImg.style.setProperty('--sy1', '1.15');
+            heroImg.style.setProperty('--sr1', '-3deg');
+            heroImg.style.setProperty('--sx2', '1.15');
+            heroImg.style.setProperty('--sy2', '0.85');
+            heroImg.style.setProperty('--sr2', '2deg');
+        } else if (r < 0.66) {
+            heroImg.style.setProperty('--sx1', '1.15');
+            heroImg.style.setProperty('--sy1', '0.8');
+            heroImg.style.setProperty('--sr1', '4deg');
+            heroImg.style.setProperty('--sx2', '0.85');
+            heroImg.style.setProperty('--sy2', '1.15');
+            heroImg.style.setProperty('--sr2', '-3deg');
+        } else {
+            heroImg.style.setProperty('--sx1', '0.9');
+            heroImg.style.setProperty('--sy1', '0.9');
+            heroImg.style.setProperty('--sr1', '-5deg');
+            heroImg.style.setProperty('--sx2', '1.1');
+            heroImg.style.setProperty('--sy2', '1.1');
+            heroImg.style.setProperty('--sr2', '4deg');
+        }
+        void heroImg.offsetWidth;
+        heroImg.classList.add('squish');
+    }
+
+    function moveDrag(cx, cy) {
+        if (!dragging) return;
+        const b = getHeroBounds();
+        posX = Math.max(b.minX, Math.min(b.maxX, cx - offsetX));
+        posY = Math.max(b.minY, Math.min(b.maxY, cy - offsetY));
+
+        velX = (cx - prevMouseX) * 1.2;
+        velY = (cy - prevMouseY) * 1.2;
+        rotVel = velX * 0.3;
+
+        prevMouseX = cx;
+        prevMouseY = cy;
+        applyTransform();
+    }
+
+    function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        heroImg.classList.remove('dragging');
+        if (!animating) { animating = true; requestAnimationFrame(physicsLoop); }
+    }
+
+    function resetImg() {
+        posX = 0; posY = 0; velX = 0; velY = 0; rotation = 0; rotVel = 0;
+        heroImg.style.transition = 'left 0.5s ease, top 0.5s ease, transform 0.5s ease';
+        applyTransform();
+        setTimeout(() => { heroImg.style.transition = 'none'; }, 500);
+    }
+
+    heroImg.addEventListener('mousedown', (e) => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+    document.addEventListener('mousemove', (e) => { moveDrag(e.clientX, e.clientY); });
+    document.addEventListener('mouseup', endDrag);
+
+    heroImg.addEventListener('touchstart', (e) => {
+        startDrag(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', (e) => {
+        if (dragging) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    document.addEventListener('touchend', endDrag);
+
+    // hero 영역을 벗어났다 돌아오면 초기화
+    let heroVisible = true;
+    const heroObserver = new IntersectionObserver((entries) => {
+        const isVisible = entries[0].isIntersecting;
+        if (!heroVisible && isVisible) resetImg();
+        heroVisible = isVisible;
+    }, { threshold: 0.3 });
+    heroObserver.observe(heroEl);
+
+    // 핀볼 미니게임
+    const pinballOverlay = document.getElementById('pinballOverlay');
+    const pinballCanvas = document.getElementById('pinballCanvas');
+    const pinballCtx = pinballCanvas.getContext('2d');
+    const pinballScoreEl = document.getElementById('pinballScore');
+    const pinballRankingEl = document.getElementById('pinballRanking');
+    const pinballTrigger = document.querySelector('.pinball-trigger');
+    const W = 360, H = 550;
+
+    const profImg = new Image();
+    profImg.src = '프로필.jpg';
+
+    let pb = {};
+    const keys = {};
+
+    function pbReset() {
+        pb = {
+            ball: { x: W / 2, y: H - 130, vx: 0, vy: 0, r: 14 },
+            launched: false,
+            launchAngle: -Math.PI / 2,
+            launchDir: 1,
+            score: 0,
+            alive: true,
+            flipperL: 0,
+            flipperR: 0,
+            bumpers: [
+                { x: 90, y: 150, r: 22, pts: 100 },
+                { x: 180, y: 100, r: 25, pts: 150 },
+                { x: 270, y: 150, r: 22, pts: 100 },
+                { x: 130, y: 250, r: 20, pts: 120 },
+                { x: 230, y: 250, r: 20, pts: 120 },
+                { x: 180, y: 200, r: 18, pts: 200 },
+            ],
+            bumperFlash: Array(6).fill(0),
+            particles: []
+        };
+        pinballScoreEl.textContent = '0';
+    }
+
+    function pbDrawBumper(b, i) {
+        const flash = pb.bumperFlash[i];
+        const glow = flash > 0 ? 0.6 : 0;
+        pinballCtx.beginPath();
+        pinballCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        const grad = pinballCtx.createRadialGradient(b.x - 4, b.y - 4, 2, b.x, b.y, b.r);
+        grad.addColorStop(0, flash > 0 ? '#fff' : '#A2D2FF');
+        grad.addColorStop(1, flash > 0 ? '#5DA9E9' : '#4682B4');
+        pinballCtx.fillStyle = grad;
+        pinballCtx.fill();
+        if (glow > 0) {
+            pinballCtx.shadowColor = '#5DA9E9';
+            pinballCtx.shadowBlur = 20;
+            pinballCtx.fill();
+            pinballCtx.shadowBlur = 0;
+        }
+        pinballCtx.strokeStyle = '#4682B4';
+        pinballCtx.lineWidth = 2;
+        pinballCtx.stroke();
+        pinballCtx.fillStyle = '#fff';
+        pinballCtx.font = 'bold 11px Noto Sans KR';
+        pinballCtx.textAlign = 'center';
+        pinballCtx.textBaseline = 'middle';
+        pinballCtx.fillText(b.pts, b.x, b.y);
+    }
+
+    function pbDrawFlipper(side) {
+        const fl = pbFlipperLine(side);
+        const dx = fl.x2 - fl.x1, dy = fl.y2 - fl.y1;
+        const angle = Math.atan2(dy, dx);
+        pinballCtx.save();
+        pinballCtx.translate(fl.x1, fl.y1);
+        pinballCtx.rotate(angle);
+        pinballCtx.beginPath();
+        pinballCtx.roundRect(-4, -6, 69, 12, 6);
+        pinballCtx.fillStyle = '#4682B4';
+        pinballCtx.fill();
+        pinballCtx.restore();
+    }
+
+    function pbDrawWalls() {
+        pinballCtx.strokeStyle = '#4682B4';
+        pinballCtx.lineWidth = 4;
+        pinballCtx.beginPath();
+        pinballCtx.moveTo(2, 0); pinballCtx.lineTo(2, H);
+        pinballCtx.moveTo(W - 2, 0); pinballCtx.lineTo(W - 2, H);
+        pinballCtx.moveTo(0, 2); pinballCtx.lineTo(W, 2);
+        pinballCtx.stroke();
+
+        pinballCtx.lineWidth = 3;
+        pinballCtx.strokeStyle = '#5DA9E9';
+        pinballCtx.beginPath();
+        pinballCtx.moveTo(4, H - 150);
+        pinballCtx.lineTo(85, H - 70);
+        pinballCtx.moveTo(W - 4, H - 150);
+        pinballCtx.lineTo(W - 85, H - 70);
+        pinballCtx.stroke();
+
+    }
+
+    function pbDrawBall() {
+        const b = pb.ball;
+        pinballCtx.save();
+        pinballCtx.beginPath();
+        pinballCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        pinballCtx.closePath();
+        pinballCtx.clip();
+        pinballCtx.drawImage(profImg, b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+        pinballCtx.restore();
+        pinballCtx.beginPath();
+        pinballCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        pinballCtx.strokeStyle = '#fff';
+        pinballCtx.lineWidth = 2;
+        pinballCtx.stroke();
+    }
+
+    function pbSpawnParticles(x, y, pts) {
+        for (let i = 0; i < 6; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            pb.particles.push({
+                x, y, vx: Math.cos(angle) * 2, vy: Math.sin(angle) * 2,
+                life: 1, text: '+' + pts
+            });
+        }
+    }
+
+    function pbDrawParticles() {
+        pb.particles.forEach(p => {
+            pinballCtx.fillStyle = 'rgba(93,169,233,' + p.life + ')';
+            pinballCtx.font = 'bold 12px Noto Sans KR';
+            pinballCtx.textAlign = 'center';
+            pinballCtx.fillText(p.text, p.x, p.y);
+        });
+    }
+
+    let prevFlipperL = 0.3, prevFlipperR = 0.3;
+
+    function pbFlipperLine(side) {
+        const bx = side === 'L' ? 85 : W - 85;
+        const angle = side === 'L' ? pb.flipperL : pb.flipperR;
+        const len = 65;
+        const dirX = side === 'L' ? 1 : -1;
+        const ex = bx + Math.cos(angle) * len * dirX;
+        const ey = (H - 70) + Math.sin(angle) * len;
+        return { x1: bx, y1: H - 70, x2: ex, y2: ey };
+    }
+
+    function pbBallFlipperCollision(side) {
+        const fl = pbFlipperLine(side);
+        const b = pb.ball;
+        const dx = fl.x2 - fl.x1, dy = fl.y2 - fl.y1;
+        const len2 = dx * dx + dy * dy;
+        let t = ((b.x - fl.x1) * dx + (b.y - fl.y1) * dy) / len2;
+        t = Math.max(0, Math.min(1, t));
+        const cx = fl.x1 + t * dx, cy = fl.y1 + t * dy;
+        const distX = b.x - cx, distY = b.y - cy;
+        const dist = Math.sqrt(distX * distX + distY * distY);
+        if (dist < b.r + 8) {
+            const nx = distX / dist, ny = distY / dist;
+            b.x = cx + nx * (b.r + 9);
+            b.y = cy + ny * (b.r + 9);
+
+            const curAngle = side === 'L' ? pb.flipperL : pb.flipperR;
+            const prevAngle = side === 'L' ? prevFlipperL : prevFlipperR;
+            const angVel = curAngle - prevAngle;
+
+            if (angVel < -0.03) {
+                const armLen = t * 65;
+                const tipSpeed = Math.abs(angVel) * armLen;
+                const power = Math.min(14, tipSpeed * 2.5 + 6);
+                const launchAngle = side === 'L' ? -Math.PI * 0.3 : -Math.PI * 0.7;
+                b.vx = Math.cos(launchAngle) * power;
+                b.vy = Math.sin(launchAngle) * power;
+            } else {
+                const vDot = b.vx * nx + b.vy * ny;
+                if (vDot < 0) {
+                    b.vx -= 1.5 * vDot * nx;
+                    b.vy -= 1.5 * vDot * ny;
+                    b.vx *= 0.6;
+                    b.vy *= 0.6;
+                }
+            }
+        }
+    }
+
+    function pbUpdate() {
+        if (!pb.alive) return;
+        const b = pb.ball;
+
+        if (!pb.launched) {
+            pb.launchAngle += 0.03 * pb.launchDir;
+            if (pb.launchAngle > -Math.PI * 0.15) pb.launchDir = -1;
+            if (pb.launchAngle < -Math.PI * 0.85) pb.launchDir = 1;
+            b.x = W / 2;
+            b.y = H - 130;
+            return;
+        }
+
+        b.vy += 0.18;
+        b.vx *= 0.998;
+        b.vy *= 0.999;
+        b.x += b.vx;
+        b.y += b.vy;
+
+        if (b.x - b.r < 4) { b.x = 4 + b.r; b.vx = Math.abs(b.vx) * 0.8; }
+        if (b.x + b.r > W - 4) { b.x = W - 4 - b.r; b.vx = -Math.abs(b.vx) * 0.8; }
+        if (b.y - b.r < 4) { b.y = 4 + b.r; b.vy = Math.abs(b.vy) * 0.8; }
+
+        // 가이드 벽 충돌 함수
+        function wallCollide(wx1, wy1, wx2, wy2) {
+            const dx = wx2 - wx1, dy = wy2 - wy1;
+            const len2 = dx * dx + dy * dy;
+            let t = ((b.x - wx1) * dx + (b.y - wy1) * dy) / len2;
+            t = Math.max(0, Math.min(1, t));
+            const cx = wx1 + t * dx, cy = wy1 + t * dy;
+            const distX = b.x - cx, distY = b.y - cy;
+            const dist = Math.sqrt(distX * distX + distY * distY);
+            if (dist < b.r) {
+                const nx = distX / dist, ny = distY / dist;
+                b.x = cx + nx * (b.r + 1);
+                b.y = cy + ny * (b.r + 1);
+                const vDot = b.vx * nx + b.vy * ny;
+                if (vDot < 0) {
+                    b.vx -= 1.8 * vDot * nx;
+                    b.vy -= 1.8 * vDot * ny;
+                }
+            }
+        }
+        // 왼쪽 가이드 벽
+        wallCollide(4, H - 150, 85, H - 70);
+        // 오른쪽 가이드 벽
+        wallCollide(W - 4, H - 150, W - 85, H - 70);
+
+        pb.bumpers.forEach((bmp, i) => {
+            const dx = b.x - bmp.x, dy = b.y - bmp.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < b.r + bmp.r) {
+                const nx = dx / dist, ny = dy / dist;
+                b.x = bmp.x + nx * (b.r + bmp.r + 1);
+                b.y = bmp.y + ny * (b.r + bmp.r + 1);
+                const speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+                b.vx = nx * Math.max(speed, 4);
+                b.vy = ny * Math.max(speed, 4);
+                pb.score += bmp.pts;
+                pb.bumperFlash[i] = 1;
+                pbSpawnParticles(bmp.x, bmp.y - bmp.r - 10, bmp.pts);
+                pinballScoreEl.textContent = pb.score;
+            }
+        });
+
+        pb.bumperFlash = pb.bumperFlash.map(f => Math.max(0, f - 0.05));
+
+        pbBallFlipperCollision('L');
+        pbBallFlipperCollision('R');
+
+        pb.particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy - 0.5;
+            p.life -= 0.03;
+        });
+        pb.particles = pb.particles.filter(p => p.life > 0);
+
+        prevFlipperL = pb.flipperL;
+        prevFlipperR = pb.flipperR;
+        const targetL = keys['q'] ? -0.6 : 0.3;
+        const targetR = keys['e'] ? -0.6 : 0.3;
+        pb.flipperL += (targetL - pb.flipperL) * 0.35;
+        pb.flipperR += (targetR - pb.flipperR) * 0.35;
+
+        if (b.y > H + 30) {
+            pb.alive = false;
+            if (pbCheckRanking(pb.score)) {
+                pendingScore = pb.score;
+                pinballNameForm.classList.add('active');
+                pinballNameInput.focus();
+            }
+            pbShowRanking();
+        }
+    }
+
+    function pbDraw() {
+        pinballCtx.clearRect(0, 0, W, H);
+        pbDrawWalls();
+        pb.bumpers.forEach((b, i) => pbDrawBumper(b, i));
+        pbDrawFlipper('L');
+        pbDrawFlipper('R');
+        pbDrawBall();
+        pbDrawParticles();
+
+        if (!pb.launched) {
+            const arrowLen = 50;
+            const ax = W / 2 + Math.cos(pb.launchAngle) * arrowLen;
+            const ay = (H - 130) + Math.sin(pb.launchAngle) * arrowLen;
+            pinballCtx.beginPath();
+            pinballCtx.moveTo(W / 2, H - 130);
+            pinballCtx.lineTo(ax, ay);
+            pinballCtx.strokeStyle = 'rgba(93,169,233,0.8)';
+            pinballCtx.lineWidth = 3;
+            pinballCtx.stroke();
+            const headAngle = pb.launchAngle;
+            pinballCtx.beginPath();
+            pinballCtx.moveTo(ax, ay);
+            pinballCtx.lineTo(ax - Math.cos(headAngle - 0.4) * 12, ay - Math.sin(headAngle - 0.4) * 12);
+            pinballCtx.moveTo(ax, ay);
+            pinballCtx.lineTo(ax - Math.cos(headAngle + 0.4) * 12, ay - Math.sin(headAngle + 0.4) * 12);
+            pinballCtx.stroke();
+
+            pinballCtx.fillStyle = 'rgba(70,130,180,0.7)';
+            pinballCtx.font = 'bold 14px Noto Sans KR';
+            pinballCtx.textAlign = 'center';
+            pinballCtx.fillText('Space를 눌러 발사!', W / 2, H / 2 - 30);
+        }
+
+        if (!pb.alive) {
+            pinballCtx.fillStyle = 'rgba(0,0,0,0.4)';
+            pinballCtx.fillRect(0, 0, W, H);
+            pinballCtx.fillStyle = '#fff';
+            pinballCtx.font = 'bold 28px Noto Sans KR';
+            pinballCtx.textAlign = 'center';
+            pinballCtx.fillText('Game Over', W / 2, H / 2 - 20);
+            pinballCtx.font = 'bold 20px Noto Sans KR';
+            pinballCtx.fillText('Score: ' + pb.score, W / 2, H / 2 + 15);
+        }
+    }
+
+    let pbRunning = false;
+    function pbLoop() {
+        if (!pbRunning) return;
+        pbUpdate();
+        pbDraw();
+        requestAnimationFrame(pbLoop);
+    }
+
+    const pinballNameForm = document.getElementById('pinballNameForm');
+    const pinballNameInput = document.getElementById('pinballNameInput');
+    const pinballNameSubmit = document.getElementById('pinballNameSubmit');
+    let pendingScore = 0;
+
+    function pbCheckRanking(score) {
+        if (score === 0) return false;
+        const ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
+        return ranks.length < 5 || score > ranks[ranks.length - 1].score;
+    }
+
+    function pbSaveScore(name, score) {
+        let ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
+        ranks.push({ name, score, date: new Date().toLocaleDateString('ko-KR') });
+        ranks.sort((a, b) => b.score - a.score);
+        ranks = ranks.slice(0, 5);
+        localStorage.setItem('pinballRanks', JSON.stringify(ranks));
+    }
+
+    function pbShowRanking() {
+        const ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
+        if (!ranks.length) { pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4><div style="font-size:0.85rem;color:var(--text-light);">기록이 없습니다</div>'; return; }
+        const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
+        pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4>' + ranks.map((r, i) =>
+            '<div class="pinball-rank-item"><span class="rank-medal">' + medals[i] + ' ' + r.name + '</span><span>' + r.score + '점</span></div>'
+        ).join('');
+    }
+
+    pinballNameSubmit.addEventListener('click', () => {
+        const name = pinballNameInput.value.trim() || '익명';
+        pbSaveScore(name, pendingScore);
+        pinballNameForm.classList.remove('active');
+        pinballNameInput.value = '';
+        pbShowRanking();
+    });
+
+    pinballNameInput.addEventListener('keydown', (e) => {
+        e.stopPropagation();
+        if (e.key === 'Enter') pinballNameSubmit.click();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        keys[e.key.toLowerCase()] = true;
+        if (e.key === ' ' && pinballOverlay.classList.contains('active')) {
+            e.preventDefault();
+            if (!pb.launched && pb.alive) {
+                pb.launched = true;
+                const power = 10;
+                pb.ball.vx = Math.cos(pb.launchAngle) * power;
+                pb.ball.vy = Math.sin(pb.launchAngle) * power;
+            }
+        }
+    });
+    document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
+    pinballTrigger.addEventListener('click', () => {
+        pinballOverlay.classList.add('active');
+        pbReset();
+        pbShowRanking();
+        pbRunning = true;
+        pbLoop();
+    });
+
+    document.getElementById('pinballClose').addEventListener('click', () => {
+        pinballOverlay.classList.remove('active');
+        pbRunning = false;
+    });
+    pinballOverlay.addEventListener('click', (e) => {
+        if (e.target === pinballOverlay) { pinballOverlay.classList.remove('active'); pbRunning = false; }
+    });
+    document.getElementById('pinballRestart').addEventListener('click', () => {
+        pbReset();
+        pbShowRanking();
+        if (!pbRunning) { pbRunning = true; pbLoop(); }
+    });
+
+    // 틱택토 미니게임
+    const tttOverlay = document.getElementById('tttOverlay');
+    const tttBoard = document.getElementById('tttBoard');
+    const tttStatus = document.getElementById('tttStatus');
+    const tttRestart = document.getElementById('tttRestart');
+    const tttClose = document.getElementById('tttClose');
+    const tttTrigger = document.querySelector('.ttt-trigger');
+
+    let board = Array(9).fill('');
+    let gameOver = false;
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+    function checkWin(b, mark) {
+        return wins.find(w => w.every(i => b[i] === mark)) || null;
+    }
+
+    function aiMove() {
+        const empty = board.map((v,i) => v === '' ? i : -1).filter(i => i >= 0);
+        for (const w of wins) { const e = w.filter(i => board[i] === ''); const x = w.filter(i => board[i] === 'X'); if (x.length === 2 && e.length === 1) return e[0]; }
+        if (Math.random() < 0.15) return empty[Math.floor(Math.random() * empty.length)];
+        for (const w of wins) { const e = w.filter(i => board[i] === ''); const o = w.filter(i => board[i] === 'O'); if (o.length === 2 && e.length === 1) return e[0]; }
+        if (board[4] === '') return 4;
+        const corners = [0,2,6,8].filter(i => board[i] === '');
+        if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+        return empty[Math.floor(Math.random() * empty.length)];
+    }
+
+    function renderBoard() {
+        tttBoard.innerHTML = '';
+        board.forEach((cell, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'ttt-cell' + (cell ? ' taken ' + cell.toLowerCase() : '');
+            btn.textContent = cell === 'X' ? '❌' : cell === 'O' ? '⭕' : '';
+            btn.addEventListener('click', () => playerMove(i));
+            tttBoard.appendChild(btn);
+        });
+    }
+
+    function highlightWin(combo) {
+        const cells = tttBoard.querySelectorAll('.ttt-cell');
+        combo.forEach(i => cells[i].classList.add('win-cell'));
+    }
+
+    function playerMove(i) {
+        if (gameOver || board[i]) return;
+        board[i] = 'O';
+        const pw = checkWin(board, 'O');
+        if (pw) { gameOver = true; renderBoard(); highlightWin(pw); tttStatus.textContent = '🎉 당신이 이겼습니다!'; return; }
+        if (board.every(c => c)) { gameOver = true; renderBoard(); tttStatus.textContent = '🤝 무승부!'; return; }
+        renderBoard();
+        tttStatus.textContent = '🤔 상대가 생각 중...';
+        setTimeout(() => {
+            const ai = aiMove();
+            if (ai === undefined) return;
+            board[ai] = 'X';
+            const aw = checkWin(board, 'X');
+            if (aw) { gameOver = true; renderBoard(); highlightWin(aw); tttStatus.textContent = '😢 아쉽게 졌습니다!'; return; }
+            if (board.every(c => c)) { gameOver = true; renderBoard(); tttStatus.textContent = '🤝 무승부!'; return; }
+            renderBoard();
+            tttStatus.textContent = '당신의 차례입니다!';
+        }, 400);
+    }
+
+    function resetGame() {
+        board = Array(9).fill('');
+        gameOver = false;
+        tttStatus.textContent = '당신은 ⭕ 입니다. 먼저 시작하세요!';
+        renderBoard();
+    }
+
+    tttTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        tttOverlay.classList.add('active');
+        resetGame();
+    });
+
+    tttClose.addEventListener('click', () => tttOverlay.classList.remove('active'));
+    tttOverlay.addEventListener('click', (e) => { if (e.target === tttOverlay) tttOverlay.classList.remove('active'); });
+    tttRestart.addEventListener('click', resetGame);
 
     // Activities 아코디언 부드러운 애니메이션
     document.querySelectorAll('.activity-item').forEach(details => {
