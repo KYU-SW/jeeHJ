@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 구글 폰트 (Pretendard 대체용 널리 쓰이는 Noto Sans KR) -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     
     <style>
         html { scroll-behavior: smooth; }
@@ -357,6 +359,103 @@
             font-size: 0.85rem; font-weight: 600;
             cursor: pointer;
         }
+
+        /* 리듬게임 */
+        .rhythm-trigger:hover {
+            transform: scale(1.3);
+            color: #f1c40f !important;
+        }
+
+        .rhythm-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .rhythm-overlay.active { display: flex; }
+
+        .rhythm-modal {
+            background: #1a1a2e;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .rhythm-game { display: flex; flex-direction: column; align-items: center; }
+
+        .rhythm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.8rem;
+        }
+
+        .rhythm-title { font-size: 1.3rem; font-weight: 700; color: #f1c40f; }
+        .rhythm-score-display { font-size: 1rem; font-weight: 700; color: #A2D2FF; }
+
+        .rhythm-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; color: #888;
+        }
+        .rhythm-close:hover { color: #fff; }
+
+        .rhythm-canvas {
+            border-radius: 12px;
+            border: 2px solid #333;
+            display: block;
+        }
+
+        .rhythm-side {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-width: 150px;
+            margin-top: 2.5rem;
+        }
+
+        .rhythm-info {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .rhythm-combo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1c40f;
+            min-height: 2rem;
+        }
+
+        .rhythm-stats {
+            text-align: left;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        .rhythm-stats div { padding: 2px 0; }
+        .rhythm-stats .perfect { color: #f1c40f; }
+        .rhythm-stats .good { color: #2ecc71; }
+        .rhythm-stats .miss { color: #e74c3c; }
+
+        .rhythm-restart {
+            padding: 8px 24px;
+            border: none; border-radius: 30px;
+            background: #f1c40f; color: #1a1a2e;
+            font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: var(--transition);
+        }
+        .rhythm-restart:hover { background: #f39c12; }
 
         /* 틱택토 모달 */
         .ttt-trigger:hover {
@@ -824,7 +923,7 @@
             <div style="font-size: 0.95rem;">SW, 디자인, 게임 프로그래밍</div>
         </div>
         <div class="info-item">
-            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-bolt"></i> 강점</div>
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-bolt rhythm-trigger" style="cursor:pointer; transition: transform 0.2s;"></i> 강점</div>
             <div style="font-size: 0.95rem;">긍정적인 마인드와 끈기</div>
         </div>
     </div>
@@ -998,6 +1097,26 @@
         </div>
     </section>
 </main>
+
+<!-- 리듬게임 모달 -->
+<div class="rhythm-overlay" id="rhythmOverlay">
+    <div class="rhythm-modal">
+        <button class="rhythm-close" id="rhythmClose">&times;</button>
+        <div class="rhythm-game">
+            <div class="rhythm-header">
+                <div class="rhythm-title">⚡ Rhythm</div>
+                <div class="rhythm-score-display">Score: <span id="rhythmScore">0</span></div>
+            </div>
+            <canvas class="rhythm-canvas" id="rhythmCanvas" width="320" height="500"></canvas>
+        </div>
+        <div class="rhythm-side">
+            <div class="rhythm-combo" id="rhythmCombo"></div>
+            <div class="rhythm-stats" id="rhythmStats"></div>
+            <div class="rhythm-info">D F J K<br>타이밍에 맞춰 누르세요!</div>
+            <button class="rhythm-restart" id="rhythmRestart">다시하기</button>
+        </div>
+    </div>
+</div>
 
 <!-- 핀볼 모달 -->
 <div class="pinball-overlay" id="pinballOverlay">
@@ -1230,6 +1349,263 @@
         heroVisible = isVisible;
     }, { threshold: 0.3 });
     heroObserver.observe(heroEl);
+
+    // 리듬게임
+    const rhythmOverlay = document.getElementById('rhythmOverlay');
+    const rhythmCanvas = document.getElementById('rhythmCanvas');
+    const rCtx = rhythmCanvas.getContext('2d');
+    const rhythmScoreEl = document.getElementById('rhythmScore');
+    const rhythmComboEl = document.getElementById('rhythmCombo');
+    const rhythmStatsEl = document.getElementById('rhythmStats');
+    const RW = 320, RH = 500;
+    const lanes = [0, 1, 2, 3];
+    const laneKeys = ['d', 'f', 'j', 'k'];
+    const laneLabels = ['D', 'F', 'J', 'K'];
+    const laneColors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f'];
+    const laneW = RW / 4;
+    const hitY = RH - 60;
+    let rh = {};
+    let rhRunning = false;
+    let rhPressed = {};
+    let rhFlash = [0, 0, 0, 0];
+    let rhJudge = [];
+
+    function rhReset() {
+        rh = {
+            notes: [],
+            score: 0,
+            combo: 0,
+            maxCombo: 0,
+            perfect: 0,
+            good: 0,
+            miss: 0,
+            speed: 3,
+            spawnTimer: 0,
+            spawnInterval: 45,
+            elapsed: 0,
+            done: false,
+            totalNotes: 80,
+            spawned: 0
+        };
+        rhJudge = [];
+        rhythmScoreEl.textContent = '0';
+        rhythmComboEl.textContent = '';
+        rhUpdateStats();
+    }
+
+    function rhUpdateStats() {
+        rhythmStatsEl.innerHTML =
+            '<div class="perfect">Perfect: ' + rh.perfect + '</div>' +
+            '<div class="good">Good: ' + rh.good + '</div>' +
+            '<div class="miss">Miss: ' + rh.miss + '</div>' +
+            '<div style="margin-top:4px;">Max Combo: ' + rh.maxCombo + '</div>';
+    }
+
+    function rhSpawnNote() {
+        if (rh.spawned >= rh.totalNotes) return;
+        const lane = Math.floor(Math.random() * 4);
+        rh.notes.push({ lane, y: -20, hit: false });
+        rh.spawned++;
+
+        if (Math.random() < 0.3 && rh.spawned < rh.totalNotes) {
+            let lane2 = (lane + 1 + Math.floor(Math.random() * 3)) % 4;
+            rh.notes.push({ lane: lane2, y: -20, hit: false });
+            rh.spawned++;
+        }
+    }
+
+    function rhJudgeHit(lane) {
+        let best = null, bestDist = Infinity;
+        rh.notes.forEach(n => {
+            if (n.lane !== lane || n.hit) return;
+            const dist = Math.abs(n.y - hitY);
+            if (dist < bestDist) { bestDist = dist; best = n; }
+        });
+
+        if (best && bestDist < 25) {
+            best.hit = true;
+            rh.combo++;
+            if (rh.combo > rh.maxCombo) rh.maxCombo = rh.combo;
+            if (bestDist < 12) {
+                rh.perfect++;
+                rh.score += 100 * (1 + Math.floor(rh.combo / 10) * 0.5);
+                rhJudge.push({ text: 'PERFECT!', color: '#f1c40f', life: 1 });
+            } else {
+                rh.good++;
+                rh.score += 50 * (1 + Math.floor(rh.combo / 10) * 0.5);
+                rhJudge.push({ text: 'GOOD', color: '#2ecc71', life: 1 });
+            }
+            rhythmScoreEl.textContent = Math.floor(rh.score);
+            rhythmComboEl.textContent = rh.combo > 2 ? rh.combo + ' COMBO' : '';
+            rhFlash[lane] = 1;
+        }
+    }
+
+    function rhUpdate() {
+        if (rh.done) return;
+        rh.elapsed++;
+
+        if (rh.elapsed > 120 && rh.elapsed % 300 === 0 && rh.spawnInterval > 25) {
+            rh.spawnInterval -= 3;
+            rh.speed += 0.15;
+        }
+
+        rh.spawnTimer++;
+        if (rh.spawnTimer >= rh.spawnInterval) {
+            rh.spawnTimer = 0;
+            rhSpawnNote();
+        }
+
+        rh.notes.forEach(n => {
+            if (!n.hit) n.y += rh.speed;
+        });
+
+        rh.notes.forEach(n => {
+            if (!n.hit && n.y > hitY + 40) {
+                n.hit = true;
+                rh.miss++;
+                rh.combo = 0;
+                rhythmComboEl.textContent = '';
+                rhJudge.push({ text: 'MISS', color: '#e74c3c', life: 1 });
+            }
+        });
+
+        rh.notes = rh.notes.filter(n => n.y < RH + 30 || !n.hit);
+        rhJudge.forEach(j => j.life -= 0.025);
+        rhJudge = rhJudge.filter(j => j.life > 0);
+        rhFlash = rhFlash.map(f => Math.max(0, f - 0.06));
+
+        if (rh.spawned >= rh.totalNotes && rh.notes.every(n => n.hit)) {
+            rh.done = true;
+            rhUpdateStats();
+        }
+    }
+
+    function rhDraw() {
+        rCtx.fillStyle = '#1a1a2e';
+        rCtx.fillRect(0, 0, RW, RH);
+
+        for (let i = 1; i < 4; i++) {
+            rCtx.beginPath();
+            rCtx.moveTo(i * laneW, 0);
+            rCtx.lineTo(i * laneW, RH);
+            rCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+            rCtx.lineWidth = 1;
+            rCtx.stroke();
+        }
+
+        rCtx.fillStyle = 'rgba(255,255,255,0.05)';
+        rCtx.fillRect(0, hitY - 20, RW, 40);
+        rCtx.strokeStyle = 'rgba(255,255,255,0.3)';
+        rCtx.lineWidth = 2;
+        rCtx.beginPath();
+        rCtx.moveTo(0, hitY);
+        rCtx.lineTo(RW, hitY);
+        rCtx.stroke();
+
+        rh.notes.forEach(n => {
+            if (n.hit) return;
+            const x = n.lane * laneW + laneW / 2;
+            const grad = rCtx.createRadialGradient(x, n.y, 2, x, n.y, 16);
+            grad.addColorStop(0, laneColors[n.lane]);
+            grad.addColorStop(1, laneColors[n.lane] + '44');
+            rCtx.beginPath();
+            rCtx.arc(x, n.y, 16, 0, Math.PI * 2);
+            rCtx.fillStyle = grad;
+            rCtx.fill();
+            rCtx.strokeStyle = laneColors[n.lane];
+            rCtx.lineWidth = 2;
+            rCtx.stroke();
+        });
+
+        for (let i = 0; i < 4; i++) {
+            const x = i * laneW + laneW / 2;
+            const pressed = rhPressed[laneKeys[i]];
+            const flash = rhFlash[i];
+
+            if (flash > 0) {
+                rCtx.beginPath();
+                rCtx.arc(x, hitY, 30 * flash, 0, Math.PI * 2);
+                rCtx.fillStyle = laneColors[i] + Math.floor(flash * 60).toString(16).padStart(2, '0');
+                rCtx.fill();
+            }
+
+            rCtx.beginPath();
+            rCtx.arc(x, hitY, 18, 0, Math.PI * 2);
+            rCtx.fillStyle = pressed ? laneColors[i] : 'rgba(255,255,255,0.15)';
+            rCtx.fill();
+            rCtx.strokeStyle = laneColors[i];
+            rCtx.lineWidth = 2;
+            rCtx.stroke();
+
+            rCtx.fillStyle = pressed ? '#fff' : '#888';
+            rCtx.font = 'bold 13px Noto Sans KR';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText(laneLabels[i], x, hitY);
+        }
+
+        rhJudge.forEach(j => {
+            rCtx.fillStyle = j.color + Math.floor(j.life * 255).toString(16).padStart(2, '0');
+            rCtx.font = 'bold 20px Noto Sans KR';
+            rCtx.textAlign = 'center';
+            rCtx.fillText(j.text, RW / 2, hitY - 50 - (1 - j.life) * 30);
+        });
+
+        if (rh.done) {
+            rCtx.fillStyle = 'rgba(0,0,0,0.5)';
+            rCtx.fillRect(0, 0, RW, RH);
+            rCtx.fillStyle = '#f1c40f';
+            rCtx.font = 'bold 28px Noto Sans KR';
+            rCtx.textAlign = 'center';
+            rCtx.fillText('CLEAR!', RW / 2, RH / 2 - 30);
+            rCtx.fillStyle = '#fff';
+            rCtx.font = 'bold 18px Noto Sans KR';
+            rCtx.fillText('Score: ' + Math.floor(rh.score), RW / 2, RH / 2 + 10);
+        }
+    }
+
+    function rhLoop() {
+        if (!rhRunning) return;
+        rhUpdate();
+        rhDraw();
+        requestAnimationFrame(rhLoop);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        if (!rhythmOverlay.classList.contains('active')) return;
+        if (laneKeys.includes(k) && !rhPressed[k]) {
+            rhPressed[k] = true;
+            const lane = laneKeys.indexOf(k);
+            rhJudgeHit(lane);
+            rhUpdateStats();
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        rhPressed[e.key.toLowerCase()] = false;
+    });
+
+    document.querySelector('.rhythm-trigger').addEventListener('click', (e) => {
+        e.stopPropagation();
+        rhythmOverlay.classList.add('active');
+        rhReset();
+        rhRunning = true;
+        rhLoop();
+    });
+
+    document.getElementById('rhythmClose').addEventListener('click', () => {
+        rhythmOverlay.classList.remove('active');
+        rhRunning = false;
+    });
+    rhythmOverlay.addEventListener('click', (e) => {
+        if (e.target === rhythmOverlay) { rhythmOverlay.classList.remove('active'); rhRunning = false; }
+    });
+    document.getElementById('rhythmRestart').addEventListener('click', () => {
+        rhReset();
+        if (!rhRunning) { rhRunning = true; rhLoop(); }
+    });
 
     // 핀볼 미니게임
     const pinballOverlay = document.getElementById('pinballOverlay');
@@ -1500,12 +1876,11 @@
 
         if (b.y > H + 30) {
             pb.alive = false;
-            if (pbCheckRanking(pb.score)) {
+            if (pb.score > 0) {
                 pendingScore = pb.score;
                 pinballNameForm.classList.add('active');
-                pinballNameInput.focus();
+                setTimeout(() => pinballNameInput.focus(), 100);
             }
-            pbShowRanking();
         }
     }
 
@@ -1562,6 +1937,32 @@
         requestAnimationFrame(pbLoop);
     }
 
+    firebase.initializeApp({
+        apiKey: "AIzaSyBuZBnr5VV0ELmzRe44kBc3ovNsNpn5UKQ",
+        authDomain: "portfolio-pinball.firebaseapp.com",
+        databaseURL: "https://portfolio-pinball-default-rtdb.firebaseio.com",
+        projectId: "portfolio-pinball",
+        storageBucket: "portfolio-pinball.firebasestorage.app",
+        messagingSenderId: "275737079166",
+        appId: "1:275737079166:web:67a318fdaced9b2888972f"
+    });
+    const fbDb = firebase.database();
+    const ranksRef = fbDb.ref('pinballRanks');
+    let cachedRanks = [];
+
+    function pbFetchRanks() {
+        ranksRef.once('value').then(function(snapshot) {
+            cachedRanks = [];
+            snapshot.forEach(function(child) {
+                cachedRanks.push({ key: child.key, name: child.val().name, score: child.val().score, date: child.val().date });
+            });
+            cachedRanks.sort(function(a, b) { return b.score - a.score; });
+            cachedRanks = cachedRanks.slice(0, 5);
+            pbRenderRanking();
+        }).catch(function(err) { alert('랭킹 불러오기 실패: ' + err.message); });
+    }
+    pbFetchRanks();
+
     const pinballNameForm = document.getElementById('pinballNameForm');
     const pinballNameInput = document.getElementById('pinballNameInput');
     const pinballNameSubmit = document.getElementById('pinballNameSubmit');
@@ -1569,33 +1970,31 @@
 
     function pbCheckRanking(score) {
         if (score === 0) return false;
-        const ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
-        return ranks.length < 5 || score > ranks[ranks.length - 1].score;
+        return cachedRanks.length < 5 || score > cachedRanks[cachedRanks.length - 1].score;
     }
 
     function pbSaveScore(name, score) {
-        let ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
-        ranks.push({ name, score, date: new Date().toLocaleDateString('ko-KR') });
-        ranks.sort((a, b) => b.score - a.score);
-        ranks = ranks.slice(0, 5);
-        localStorage.setItem('pinballRanks', JSON.stringify(ranks));
+        ranksRef.push({ name: name, score: score, date: new Date().toLocaleDateString('ko-KR') })
+            .then(function() { pbFetchRanks(); })
+            .catch(function(err) { alert('저장 실패: ' + err.message); });
     }
 
-    function pbShowRanking() {
-        const ranks = JSON.parse(localStorage.getItem('pinballRanks') || '[]');
-        if (!ranks.length) { pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4><div style="font-size:0.85rem;color:var(--text-light);">기록이 없습니다</div>'; return; }
+    function pbRenderRanking() {
+        if (!cachedRanks.length) { pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4><div style="font-size:0.85rem;color:var(--text-light);">기록이 없습니다</div>'; return; }
         const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
-        pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4>' + ranks.map((r, i) =>
+        pinballRankingEl.innerHTML = '<h4>🏆 랭킹</h4>' + cachedRanks.map((r, i) =>
             '<div class="pinball-rank-item"><span class="rank-medal">' + medals[i] + ' ' + r.name + '</span><span>' + r.score + '점</span></div>'
         ).join('');
     }
 
+    function pbShowRanking() { pbRenderRanking(); }
+
     pinballNameSubmit.addEventListener('click', () => {
         const name = pinballNameInput.value.trim() || '익명';
-        pbSaveScore(name, pendingScore);
+        const scoreToSave = pendingScore;
         pinballNameForm.classList.remove('active');
         pinballNameInput.value = '';
-        pbShowRanking();
+        if (scoreToSave > 0) pbSaveScore(name, scoreToSave);
     });
 
     pinballNameInput.addEventListener('keydown', (e) => {
