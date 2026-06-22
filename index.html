@@ -26,6 +26,40 @@
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
+        [data-theme="dark"] {
+            --primary-color: #7EC8F2;
+            --primary-light: #1a2a3a;
+            --primary-dark: #9DD5F5;
+            --accent-color: #5BA0D0;
+            --text-color: #E0E8F0;
+            --text-light: #A0B0C0;
+            --bg-color: #0f1923;
+            --white: #1a2a3a;
+        }
+        [data-theme="dark"] .navbar {
+            background-color: #15202e;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, #0f1923 0%, #1a2a3a 100%);
+        }
+        [data-theme="dark"] .card {
+            background: #1a2a3a;
+            border-color: #2a3a4a;
+        }
+        [data-theme="dark"] .nav-links {
+            background-color: #15202e;
+            border-color: #2a3a4a;
+        }
+        [data-theme="dark"] .course-dropdown-btn {
+            background: #1a2a3a;
+            border-color: #2a3a4a;
+        }
+        [data-theme="dark"] .course-dropdown-menu {
+            background: #15202e;
+            border-color: #2a3a4a;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -359,6 +393,188 @@
             font-size: 0.85rem; font-weight: 600;
             cursor: pointer;
         }
+
+        /* 연표 */
+        .timeline-trigger:hover {
+            color: var(--primary-color) !important;
+            text-decoration: underline;
+        }
+
+        .timeline-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .timeline-overlay.active { display: flex; }
+
+        .timeline-modal {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 380px;
+            max-width: 450px;
+        }
+
+        .timeline-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; color: var(--text-light);
+        }
+        .timeline-close:hover { color: var(--text-color); }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-line {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, var(--accent-color), var(--primary-color));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.8rem;
+            opacity: 0;
+            animation: timelineSlide 0.4s ease forwards;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 3px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .timeline-item:last-child::before {
+            background: #f1c40f;
+            box-shadow: 0 0 0 2px #f1c40f, 0 0 10px rgba(241,196,15,0.4);
+        }
+
+        .timeline-item:last-child { margin-bottom: 0; }
+
+        @keyframes timelineSlide {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .timeline-year {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2px;
+        }
+
+        .timeline-school {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .timeline-item:last-child .timeline-school {
+            color: var(--primary-dark);
+        }
+
+        /* 저메추 */
+        .food-trigger:hover {
+            transform: scale(1.3);
+            color: #e67e22 !important;
+        }
+
+        .food-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .food-overlay.active { display: flex; }
+
+        .food-modal {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 300px;
+        }
+
+        .food-close {
+            position: absolute; top: 12px; right: 16px;
+            background: none; border: none; font-size: 1.5rem;
+            cursor: pointer; color: var(--text-light);
+        }
+        .food-close:hover { color: var(--text-color); }
+
+        .food-emoji {
+            font-size: 5rem;
+            margin: 1rem 0;
+            animation: foodBounce 0.5s ease;
+        }
+
+        @keyframes foodBounce {
+            0%   { transform: scale(0) rotate(-20deg); }
+            60%  { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .food-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .food-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .food-btn {
+            padding: 10px 28px;
+            border: none; border-radius: 30px;
+            background: #e67e22; color: var(--white);
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: var(--transition);
+        }
+        .food-btn:hover { background: #d35400; transform: scale(1.05); }
 
         /* 리듬게임 */
         .rhythm-trigger:hover {
@@ -793,27 +1009,325 @@
         }
 
         /* Courses 섹션 디자인 개선 */
-        .course-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .course-item {
-            background-color: var(--white);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        .course-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid var(--primary-light);
+        }
+        .course-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--primary-light);
+        }
+        .course-dropdown {
+            position: relative;
+            user-select: none;
+        }
+        .course-dropdown-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: var(--white);
+            border: 1px solid var(--primary-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            font-size: 0.9rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .course-dropdown-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .course-dropdown-btn .arrow {
+            font-size: 0.65rem;
+            transition: transform 0.3s;
+        }
+        .course-dropdown.open .arrow {
+            transform: rotate(180deg);
+        }
+        .course-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--primary-light);
+            padding: 0.5rem;
+            min-width: 120px;
+            display: none;
+            z-index: 100;
+            animation: fadeInDown 0.3s ease;
+        }
+        .course-dropdown.open .course-dropdown-menu {
+            display: block;
+        }
+        .course-dropdown-menu div {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-color);
+        }
+        .course-dropdown-menu div:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+        .course-dropdown-menu div.active {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .course-body {
+            padding: 1.2rem 1.5rem;
+        }
+        .course-item {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #f0f4f8;
             font-size: 0.95rem;
+            color: var(--text-color);
             transition: var(--transition);
         }
-
+        .course-item:last-child { border-bottom: none; }
         .course-item:hover {
             background-color: var(--primary-light);
-            transform: translateY(-3px);
+        }
+        .course-undecided {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #aaa;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* 스킬 프로그레스 바 */
+        .skill-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--primary-light);
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .skill-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .skill-icon {
+            font-size: 1.8rem;
+            width: 40px;
+            text-align: center;
+        }
+        .skill-info {
+            flex: 1;
+        }
+        .skill-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        .skill-bar {
+            height: 10px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .skill-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .skill-percent {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            min-width: 35px;
+            text-align: right;
+        }
+
+        .jlpt-track {
+            position: relative;
+            height: 10px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .jlpt-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .jlpt-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            padding: 0 2px;
+        }
+        .jlpt-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .jlpt-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            border: 2px solid var(--primary-light);
+            transition: all 0.6s ease;
+        }
+        .jlpt-marker.reached .jlpt-dot {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .jlpt-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        .jlpt-marker.reached .jlpt-label {
+            color: var(--primary-color);
+        }
+
+        /* 다크모드 토글 */
+        .dark-toggle {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            color: var(--text-color);
+        }
+        .dark-toggle:hover {
+            background: var(--primary-light);
+        }
+
+        /* 타이핑 효과 */
+        .typing-text {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            min-height: 1.6em;
+        }
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* 방명록 */
+        .guestbook {
+            max-width: 800px;
+            margin: 1.5rem auto 0;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--primary-light);
+            padding: 1.5rem 2rem;
+        }
+        .guestbook-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        .guestbook-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .guestbook-input {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--primary-light);
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        .guestbook-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(93,169,233,0.2);
+        }
+        .guestbook-submit {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary-color);
+            color: #fff;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .guestbook-submit:hover {
+            background: var(--primary-dark);
+        }
+        .guestbook-count {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: -0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .guestbook-single {
+            padding: 12px 16px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 44px;
+            transition: opacity 0.4s ease;
+        }
+        .guestbook-single .gb-date {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+        .guestbook-single.fade {
+            opacity: 0;
         }
 
         /* Activities 아코디언 스타일 */
@@ -880,15 +1394,17 @@
 
 <!-- Top Navigation -->
 <nav class="navbar">
-    <a href="#" class="nav-logo">
-        <i class="fa-solid fa-graduation-cap"></i> Student Portfolio
-    </a>
+    <span class="nav-logo" style="cursor: default;">
+        <i class="fa-solid fa-graduation-cap food-trigger" style="cursor:pointer; transition: transform 0.2s;"></i> Student Portfolio
+    </span>
     
     <!-- 스크롤 시 중앙에 나타날 프로필 -->
     <div class="nav-profile" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
         <img src="프로필.jpg" alt="지현정">
         <span style="font-weight: 700; color: var(--text-color);">지현정</span>
     </div>
+
+    <button class="dark-toggle" id="darkToggle" title="다크모드">🌙</button>
 
     <!-- 햄버거 메뉴를 위한 토글 버튼 -->
     <input type="checkbox" id="menu-toggle">
@@ -899,7 +1415,9 @@
     <ul class="nav-links">
         <li><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
         <li><a href="#vision"><i class="fa-solid fa-eye"></i> Vision</a></li>
+        <li><a href="#courses"><i class="fa-solid fa-book"></i> Courses</a></li>
         <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
+        <li><a href="#skills"><i class="fa-solid fa-code"></i> Skills</a></li>
         <li><a href="#activities"><i class="fa-solid fa-star"></i> Activities</a></li>
         <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
     </ul>
@@ -911,11 +1429,12 @@
         <img src="프로필.jpg" alt="지현정 프로필" class="hero-img">
     </div>
     <h1>지<span class="pinball-trigger">현</span>정</h1>
-    
+    <div class="typing-text" id="typingText"><span class="typing-cursor"></span></div>
+
     <!-- About Me가 Hero 섹션 안으로 이동 -->
     <div class="hero-about">
         <div class="info-item">
-            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-university"></i> 소속</div>
+            <div style="font-weight: 700; color: var(--primary-dark);"><i class="fa-solid fa-university"></i> <span class="timeline-trigger" style="cursor:pointer;">소속</span></div>
             <div style="font-size: 0.95rem;">건양대학교 국방XR학부 26학번</div>
         </div>
         <div class="info-item">
@@ -946,12 +1465,26 @@
     <!-- Courses Section -->
     <section id="courses">
         <h2 class="section-title"><i class="fa-solid fa-book"></i> Courses</h2>
-        <div class="course-list">
-            <div class="course-item">✔ 메타버스 프로그래밍 (Python)</div>
-            <div class="course-item">✔ 실감미디어 컴퓨팅개론</div>
-            <div class="course-item">✔ XR 문화지형도</div>
-            <div class="course-item">✔ 경영학 입문</div>
-            <div class="course-item">✔ 연극의 이해</div>
+        <div class="course-card">
+            <div class="course-header">
+                <div class="course-dropdown" id="gradeDropdown">
+                    <div class="course-dropdown-btn">1학년 <span class="arrow">▼</span></div>
+                    <div class="course-dropdown-menu">
+                        <div class="active" data-value="1">1학년</div>
+                        <div data-value="2">2학년</div>
+                        <div data-value="3">3학년</div>
+                        <div data-value="4">4학년</div>
+                    </div>
+                </div>
+                <div class="course-dropdown" id="semesterDropdown">
+                    <div class="course-dropdown-btn">1학기 <span class="arrow">▼</span></div>
+                    <div class="course-dropdown-menu">
+                        <div class="active" data-value="1">1학기</div>
+                        <div data-value="2">2학기</div>
+                    </div>
+                </div>
+            </div>
+            <div class="course-body" id="courseList"></div>
         </div>
     </section>
 
@@ -959,20 +1492,20 @@
     <section id="projects">
         <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Projects</h2>
         <div class="card-grid">
-            <div class="card">
+            <a href="#hero" class="card" style="text-decoration: none; color: inherit;">
                 <div class="card-content">
                     <h3>포트폴리오 홈페이지 제작</h3>
                     <p><strong>역할:</strong> 기획 및 UI/UX 개발 (1인)</p>
                     <p><strong>결과물:</strong> HTML/CSS 기반의 반응형 개인 웹사이트</p>
                 </div>
-            </div>
-            <div class="card">
+            </a>
+            <a href="https://www.roblox.com/ko/games/107699609041293/1#game-age-recommendation-details-container" target="_blank" class="card" style="text-decoration: none; color: inherit;">
                 <div class="card-content">
-                    <h3>로블록스 앱 제작</h3>
+                    <h3>로블록스 맵 제작</h3>
                     <p><strong>역할:</strong> 맵 제작 및 스크립트 설정</p>
                     <p><strong>결과물:</strong> 인사이드 아웃 영화 기반 로블록스 앱</p>
                 </div>
-            </div>
+            </a>
             <div class="card">
                 <div class="card-content">
                     <h3>XR 콘텐츠 기획안 제작</h3>
@@ -986,18 +1519,37 @@
     <!-- Skills Section -->
     <section id="skills">
         <h2 class="section-title"><i class="fa-solid fa-gears"></i> Skills</h2>
-        <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-            <div class="card" style="text-align: center; padding: 1rem;">
-                <i class="fa-brands fa-python" style="font-size: 2.5rem; color: #3776AB;"></i>
-                <p>Python</p>
+        <div class="skill-card" id="skillCard">
+            <div class="skill-row">
+                <div class="skill-icon"><i class="fa-brands fa-python" style="color:#3776AB;"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">Python</div>
+                    <div class="skill-bar"><div class="skill-fill" data-percent="30"></div></div>
+                </div>
+                <div class="skill-percent">30%</div>
             </div>
-            <div class="card" style="text-align: center; padding: 1rem;">
-                <i class="fa-brands fa-github" style="font-size: 2.5rem; color: #333;"></i>
-                <p>GitHub</p>
+            <div class="skill-row">
+                <div class="skill-icon"><i class="fa-brands fa-github" style="color:#888;"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">GitHub</div>
+                    <div class="skill-bar"><div class="skill-fill" data-percent="40"></div></div>
+                </div>
+                <div class="skill-percent">40%</div>
             </div>
-            <div class="card" style="text-align: center; padding: 1rem;">
-                <i class="fa-solid fa-certificate" style="font-size: 2.5rem; color: var(--primary-color);"></i>
-                <p>JLPT N4</p>
+            <div class="skill-row">
+                <div class="skill-icon"><i class="fa-solid fa-language" style="color:var(--primary-color);"></i></div>
+                <div class="skill-info">
+                    <div class="skill-name">JLPT</div>
+                    <div class="jlpt-track"><div class="jlpt-fill" data-percent="40"></div></div>
+                    <div class="jlpt-markers">
+                        <div class="jlpt-marker reached"><div class="jlpt-dot"></div><span class="jlpt-label">N5</span></div>
+                        <div class="jlpt-marker reached"><div class="jlpt-dot"></div><span class="jlpt-label">N4</span></div>
+                        <div class="jlpt-marker"><div class="jlpt-dot"></div><span class="jlpt-label">N3</span></div>
+                        <div class="jlpt-marker"><div class="jlpt-dot"></div><span class="jlpt-label">N2</span></div>
+                        <div class="jlpt-marker"><div class="jlpt-dot"></div><span class="jlpt-label">N1</span></div>
+                    </div>
+                </div>
+                <div class="skill-percent">N4</div>
             </div>
         </div>
     </section>
@@ -1043,7 +1595,7 @@
                     <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span style="white-space: nowrap;">🌱 2026 1학년 1학기:</span>
                         <div style="display: flex; flex-direction: column;">
-                            <span>건양메이트</span>
+                            <span>건양메이트 <a href="https://www.instagram.com/konyang_dicon_xr/" target="_blank" style="color: #E1306C; text-decoration: none;"><i class="fa-brands fa-instagram"></i></a></span>
                             <span style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">- 학과 홈페이지 사진 게시 및 학과 인스타그램 관리</span>
                         </div>
                     </div>
@@ -1072,7 +1624,6 @@
                             <span>메타버스 프로그래밍 - 로블록스 기획발표</span>
                             <span>XR 콘텐츠 문화지형도 - 백제문화 활용 콘텐츠 기획안</span>
                             <span>HUSS AI 경진대회 - 길잡이 스마트 글래스</span>
-                            <span style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">- 오악사 관련 XR 콘텐츠 기획안 최종 발표 및 피드백 수렴</span>
                         </div>
                     </div>
                 </div>
@@ -1095,8 +1646,60 @@
                 <i class="fa-brands fa-instagram"></i> SNS (@J_HJ.07)
             </a>
         </div>
+        <div class="guestbook" id="guestbook">
+            <div class="guestbook-title">📝 방명록</div>
+            <div class="guestbook-form">
+                <input type="text" class="guestbook-input" id="gbName" placeholder="이름" maxlength="5" style="flex:0 0 130px; min-width:130px; max-width:130px; padding:10px 12px; text-align:center;">
+                <input type="text" class="guestbook-input" id="gbInput" placeholder="한마디 남겨주세요! (20글자)" maxlength="30">
+                <button class="guestbook-submit" id="gbSubmit">남기기</button>
+            </div>
+            <div class="guestbook-count" id="gbCount">0 / 20</div>
+            <div class="guestbook-single" id="gbSingle"></div>
+        </div>
     </section>
 </main>
+
+<!-- 연표 모달 -->
+<div class="timeline-overlay" id="timelineOverlay">
+    <div class="timeline-modal">
+        <button class="timeline-close" id="timelineClose">&times;</button>
+        <div class="timeline-title">🏫 학력 연표</div>
+        <div class="timeline-line">
+            <div class="timeline-item" style="animation-delay: 0.1s;">
+                <div class="timeline-year">2014</div>
+                <div class="timeline-school">옥련초등학교 (전학)</div>
+            </div>
+            <div class="timeline-item" style="animation-delay: 0.2s;">
+                <div class="timeline-year">2014 ~ 2019</div>
+                <div class="timeline-school">관교초등학교</div>
+            </div>
+            <div class="timeline-item" style="animation-delay: 0.3s;">
+                <div class="timeline-year">2020 ~ 2022</div>
+                <div class="timeline-school">관교여자중학교</div>
+            </div>
+            <div class="timeline-item" style="animation-delay: 0.4s;">
+                <div class="timeline-year">2023 ~ 2025</div>
+                <div class="timeline-school">인명여자고등학교</div>
+            </div>
+            <div class="timeline-item" style="animation-delay: 0.5s;">
+                <div class="timeline-year">2026 ~</div>
+                <div class="timeline-school">건양대학교 국방XR학부 ⭐</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 저메추 모달 -->
+<div class="food-overlay" id="foodOverlay">
+    <div class="food-modal">
+        <button class="food-close" id="foodClose">&times;</button>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #e67e22; margin-bottom: 0.5rem;">🍽️ 오늘 뭐 먹지?</div>
+        <div class="food-emoji" id="foodEmoji">🍕</div>
+        <div class="food-name" id="foodName">피자</div>
+        <div class="food-desc" id="foodDesc">치즈가 쭉쭉 늘어나는 그것</div>
+        <button class="food-btn" id="foodReroll">다시 뽑기 🎲</button>
+    </div>
+</div>
 
 <!-- 리듬게임 모달 -->
 <div class="rhythm-overlay" id="rhythmOverlay">
@@ -1154,7 +1757,7 @@
 </div>
 
 <footer>
-    <p>&copy; 2024 지현정. All rights reserved.</p>
+    <p>&copy; 2026 지현정. All rights reserved.</p>
 </footer>
 
 <script>
@@ -1349,6 +1952,193 @@
         heroVisible = isVisible;
     }, { threshold: 0.3 });
     heroObserver.observe(heroEl);
+
+    // 수강과목
+    (() => {
+        const courses = {
+            '1-1': ['✔ 메타버스 프로그래밍 (Python)', '✔ 실감미디어 컴퓨팅개론', '✔ XR 문화지형도', '✔ 경영학 입문', '✔ 연극의 이해']
+        };
+        const listEl = document.getElementById('courseList');
+        let grade = '1', semester = '1';
+
+        function render() {
+            const items = courses[grade + '-' + semester];
+            if (items) {
+                listEl.innerHTML = items.map(c => '<div class="course-item">' + c + '</div>').join('');
+            } else {
+                listEl.innerHTML = '<div class="course-undecided">미정</div>';
+            }
+        }
+
+        document.querySelectorAll('.course-dropdown').forEach(dd => {
+            const btn = dd.querySelector('.course-dropdown-btn');
+            const menu = dd.querySelector('.course-dropdown-menu');
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.course-dropdown').forEach(d => { if (d !== dd) d.classList.remove('open'); });
+                dd.classList.toggle('open');
+            });
+            menu.querySelectorAll('div').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.querySelectorAll('div').forEach(d => d.classList.remove('active'));
+                    opt.classList.add('active');
+                    btn.innerHTML = opt.textContent + ' <span class="arrow">▼</span>';
+                    dd.classList.remove('open');
+                    if (dd.id === 'gradeDropdown') {
+                        grade = opt.dataset.value;
+                        semester = '1';
+                        const semDD = document.getElementById('semesterDropdown');
+                        semDD.querySelector('.course-dropdown-btn').innerHTML = '1학기 <span class="arrow">▼</span>';
+                        semDD.querySelectorAll('.course-dropdown-menu div').forEach(d => {
+                            d.classList.toggle('active', d.dataset.value === '1');
+                        });
+                    } else semester = opt.dataset.value;
+                    render();
+                });
+            });
+        });
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.course-dropdown').forEach(d => d.classList.remove('open'));
+        });
+        render();
+    })();
+
+    // 다크모드
+    (() => {
+        const btn = document.getElementById('darkToggle');
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            btn.textContent = '☀️';
+        }
+        btn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                btn.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                btn.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    })();
+
+    // 타이핑 효과
+    (() => {
+        const el = document.getElementById('typingText');
+        const texts = [
+            '건양대학교 국방XR학부 26학번',
+            '더 나은 사람이 되기 위해 노력하는 사람',
+            'SW, 디자인, 게임 프로그래밍에 관심 있어요',
+            '긍정적인 마인드와 끈기가 강점입니다'
+        ];
+        let ti = 0, ci = 0, deleting = false;
+        function tick() {
+            const txt = texts[ti];
+            if (!deleting) {
+                ci++;
+                el.innerHTML = txt.slice(0, ci) + '<span class="typing-cursor"></span>';
+                if (ci >= txt.length) { setTimeout(() => { deleting = true; tick(); }, 2000); return; }
+                setTimeout(tick, 80);
+            } else {
+                ci--;
+                el.innerHTML = txt.slice(0, ci) + '<span class="typing-cursor"></span>';
+                if (ci <= 0) { deleting = false; ti = (ti + 1) % texts.length; setTimeout(tick, 400); return; }
+                setTimeout(tick, 40);
+            }
+        }
+        tick();
+    })();
+
+    // 스킬 프로그레스 바 애니메이션
+    (() => {
+        const card = document.getElementById('skillCard');
+        const fills = card.querySelectorAll('.skill-fill, .jlpt-fill');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    fills.forEach(f => { f.style.width = f.dataset.percent + '%'; });
+                } else {
+                    fills.forEach(f => { f.style.width = '0%'; });
+                }
+            });
+        }, { threshold: 0.3 });
+        observer.observe(card);
+    })();
+
+    // 연표
+    const timelineOverlay = document.getElementById('timelineOverlay');
+    document.querySelector('.timeline-trigger').addEventListener('click', () => {
+        timelineOverlay.classList.add('active');
+        timelineOverlay.querySelectorAll('.timeline-item').forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetWidth;
+            el.style.animation = '';
+        });
+    });
+    document.getElementById('timelineClose').addEventListener('click', () => timelineOverlay.classList.remove('active'));
+    timelineOverlay.addEventListener('click', (e) => { if (e.target === timelineOverlay) timelineOverlay.classList.remove('active'); });
+
+    // 저메추
+    const foodList = [
+        { emoji: '🍕', name: '피자', desc: '치즈가 쭉쭉 늘어나는 그것' },
+        { emoji: '🍜', name: '라멘', desc: '진한 국물에 면 한 젓가락' },
+        { emoji: '🍛', name: '카레', desc: '매콤달콤한 한 그릇' },
+        { emoji: '🍔', name: '햄버거', desc: '육즙이 터지는 패티' },
+        { emoji: '🌮', name: '타코', desc: '바삭한 쉘에 가득 채운 토핑' },
+        { emoji: '🍝', name: '파스타', desc: '알덴테로 삶은 면의 매력' },
+        { emoji: '🍱', name: '도시락', desc: '정성 가득 꽉 찬 한 끼' },
+        { emoji: '🥘', name: '찌개', desc: '보글보글 뜨끈한 국물' },
+        { emoji: '🍗', name: '치킨', desc: '바삭바삭 황금빛 튀김옷' },
+        { emoji: '🥩', name: '스테이크', desc: '미디엄 레어로 굽기 딱 좋은' },
+        { emoji: '🍣', name: '초밥', desc: '신선한 생선과 밥의 하모니' },
+        { emoji: '🥟', name: '만두', desc: '쪄도 굽도 튀겨도 맛있는' },
+        { emoji: '🌯', name: '부리또', desc: '한 손에 들고 먹는 든든함' },
+        { emoji: '🍲', name: '샤브샤브', desc: '야채와 고기를 살짝 퐁당' },
+        { emoji: '🥓', name: '삼겹살', desc: '소주 한 잔과 함께라면 완벽' },
+        { emoji: '🍤', name: '돈까스', desc: '두툼한 고기에 바삭한 튀김' },
+        { emoji: '🥪', name: '샌드위치', desc: '간편하지만 든든한 한 끼' },
+        { emoji: '🍙', name: '김밥', desc: '소풍 갈 때 빠질 수 없는' },
+        { emoji: '🥗', name: '샐러드', desc: '건강하게 한 끼 해결' },
+        { emoji: '🥢', name: '떡볶이', desc: '매콤달콤 국민 간식' },
+        { emoji: '🍲', name: '마라탕', desc: '얼얼하고 화끈한 국물' },
+        { emoji: '🥘', name: '마라샹궈', desc: '볶아서 더 진한 마라 맛' },
+        { emoji: '🍚', name: '컵밥', desc: '간편하게 한 컵으로 해결' },
+        { emoji: '🍜', name: '라면', desc: '보글보글 끓여먹는 소울푸드' },
+        { emoji: '🥢', name: '짜장&짬뽕', desc: '고민될 땐 짬짜면' },
+        { emoji: '🍜', name: '쌀국수', desc: '향긋한 국물에 쫄깃한 면' },
+        { emoji: '🥘', name: '비빔밥', desc: '쓱쓱 비벼먹는 한식 대표' },
+        { emoji: '🍺', name: '술', desc: '오늘은 한 잔 하는 날' },
+    ];
+
+    const foodOverlay = document.getElementById('foodOverlay');
+    const foodEmoji = document.getElementById('foodEmoji');
+    const foodName = document.getElementById('foodName');
+    const foodDesc = document.getElementById('foodDesc');
+
+    function rollFood() {
+        const food = foodList[Math.floor(Math.random() * foodList.length)];
+        foodEmoji.style.animation = 'none';
+        void foodEmoji.offsetWidth;
+        foodEmoji.style.animation = 'foodBounce 0.5s ease';
+        foodEmoji.textContent = food.emoji;
+        foodName.textContent = food.name;
+        foodDesc.textContent = food.desc;
+    }
+
+    document.querySelector('.food-trigger').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        foodOverlay.classList.add('active');
+        rollFood();
+    });
+
+    document.getElementById('foodClose').addEventListener('click', () => foodOverlay.classList.remove('active'));
+    foodOverlay.addEventListener('click', (e) => { if (e.target === foodOverlay) foodOverlay.classList.remove('active'); });
+    document.getElementById('foodReroll').addEventListener('click', rollFood);
 
     // 리듬게임
     const rhythmOverlay = document.getElementById('rhythmOverlay');
@@ -1954,12 +2744,13 @@
 
     function pbFetchRanks() {
         ranksRef.once('value').then(function(snapshot) {
-            cachedRanks = [];
+            var all = [];
             snapshot.forEach(function(child) {
-                cachedRanks.push({ key: child.key, name: child.val().name, score: child.val().score, date: child.val().date });
+                all.push({ key: child.key, name: child.val().name, score: child.val().score, date: child.val().date });
             });
-            cachedRanks.sort(function(a, b) { return b.score - a.score; });
-            cachedRanks = cachedRanks.slice(0, 5);
+            all.sort(function(a, b) { return b.score - a.score; });
+            cachedRanks = all.slice(0, 5);
+            all.slice(5).forEach(function(r) { ranksRef.child(r.key).remove(); });
             pbRenderRanking();
         }).catch(function(err) { alert('랭킹 불러오기 실패: ' + err.message); });
     }
@@ -2171,6 +2962,83 @@
             }
         });
     });
+
+    // 방명록
+    (() => {
+        const gbRef = fbDb.ref('guestbook');
+        const nameInput = document.getElementById('gbName');
+        const input = document.getElementById('gbInput');
+        const submit = document.getElementById('gbSubmit');
+        const single = document.getElementById('gbSingle');
+        const countEl = document.getElementById('gbCount');
+        let msgs = [], gbIdx = 0, gbTimer = null;
+
+        function countChars(str) {
+            return str.replace(/\s/g, '').length;
+        }
+
+        input.addEventListener('input', () => {
+            const c = countChars(input.value);
+            countEl.textContent = c + ' / 20';
+            countEl.style.color = c > 20 ? '#e74c3c' : 'var(--text-light)';
+        });
+
+        function showMsg() {
+            if (!msgs.length) { single.innerHTML = '<span style="color:var(--text-light);">아직 방명록이 없어요</span>'; return; }
+            single.classList.add('fade');
+            setTimeout(() => {
+                const m = msgs[gbIdx];
+                single.innerHTML = '<span><strong>' + m.name + '</strong>&nbsp; ' + m.text + '</span><span class="gb-date">' + m.date + '</span>';
+                single.classList.remove('fade');
+                gbIdx = (gbIdx + 1) % msgs.length;
+            }, 400);
+        }
+
+        function startRotation() {
+            if (gbTimer) clearInterval(gbTimer);
+            gbIdx = 0;
+            showMsg();
+            if (msgs.length > 1) gbTimer = setInterval(showMsg, 5000);
+        }
+
+        function fetchMessages() {
+            gbRef.orderByChild('timestamp').limitToLast(30).once('value').then(snap => {
+                msgs = [];
+                snap.forEach(child => { msgs.push(child.val()); });
+                msgs.reverse();
+                startRotation();
+            });
+        }
+        fetchMessages();
+
+        submit.addEventListener('click', () => {
+            const text = input.value.trim();
+            const charCount = countChars(text);
+            if (!text) return;
+            if (charCount > 20) { countEl.textContent = '20글자를 초과했어요!'; countEl.style.color = '#e74c3c'; return; }
+            const name = nameInput.value.trim() || '익명';
+            gbRef.push({
+                name: name,
+                text: text,
+                date: new Date().toLocaleDateString('ko-KR'),
+                timestamp: Date.now()
+            }).then(() => {
+                nameInput.value = '';
+                input.value = '';
+                countEl.textContent = '0 / 20';
+                fetchMessages();
+            });
+        });
+
+        input.addEventListener('keydown', (e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter') submit.click();
+        });
+        nameInput.addEventListener('keydown', (e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter') submit.click();
+        });
+    })();
 </script>
 
 </body>
