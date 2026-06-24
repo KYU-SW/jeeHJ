@@ -1330,6 +1330,89 @@
             opacity: 0;
         }
 
+        /* 로드맵 */
+        .roadmap-card {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            padding-left: 60px;
+        }
+        .roadmap-card::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+        }
+        .roadmap-step {
+            position: relative;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--primary-light);
+            padding: 1.3rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        .roadmap-step:last-child { margin-bottom: 0; }
+        .roadmap-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .roadmap-step::before {
+            display: none;
+        }
+        .roadmap-dot {
+            position: absolute;
+            left: 20px;
+            transform: translateX(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            border: 3px solid var(--accent-color);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+        .roadmap-dot.current {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(93,169,233,0.3);
+        }
+        .roadmap-step.current {
+            border-color: var(--primary-color);
+        }
+        .roadmap-year {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.2rem;
+        }
+        .roadmap-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 0.4rem;
+        }
+        .roadmap-details {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        .roadmap-step.future {
+            opacity: 0.5;
+        }
+        .roadmap-step.future::before {
+            background: var(--primary-light);
+            border-color: #ccc;
+        }
+
         /* Activities 아코디언 스타일 */
         .activity-accordion {
             max-width: 800px;
@@ -1404,23 +1487,24 @@
         <span style="font-weight: 700; color: var(--text-color);">지현정</span>
     </div>
 
-    <button class="dark-toggle" id="darkToggle" title="다크모드">🌙</button>
-
     <!-- 햄버거 메뉴를 위한 토글 버튼 -->
-    <input type="checkbox" id="menu-toggle">
-    <label for="menu-toggle" class="menu-icon">
-        <i class="fa-solid fa-bars"></i>
-    </label>
-
-    <ul class="nav-links">
+    <div style="display:flex; align-items:center; gap:4px;">
+        <button class="dark-toggle" id="darkToggle" title="다크모드">🌙</button>
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+        </label>
+        <ul class="nav-links">
         <li><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
         <li><a href="#vision"><i class="fa-solid fa-eye"></i> Vision</a></li>
         <li><a href="#courses"><i class="fa-solid fa-book"></i> Courses</a></li>
         <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
         <li><a href="#skills"><i class="fa-solid fa-code"></i> Skills</a></li>
         <li><a href="#activities"><i class="fa-solid fa-star"></i> Activities</a></li>
+        <li><a href="#roadmap"><i class="fa-solid fa-road"></i> Roadmap</a></li>
         <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
-    </ul>
+        </ul>
+    </div>
 </nav>
 
 <!-- Hero Section -->
@@ -1628,6 +1712,37 @@
                     </div>
                 </div>
             </details>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <h2 class="section-title"><i class="fa-solid fa-road"></i> Roadmap</h2>
+        <div class="roadmap-card">
+            <div class="roadmap-dot current" style="top:1.8rem;"></div>
+            <div class="roadmap-step current">
+                <div class="roadmap-year">1학년 — 기초 다지기</div>
+                <div class="roadmap-title">🌱 지금 여기!</div>
+                <div class="roadmap-details">Python 기초 학습 · 전공 탐색 · 기초 프로젝트 경험<br>포트폴리오 제작 · 로블록스 맵 개발 · XR 콘텐츠 기획</div>
+            </div>
+            <div class="roadmap-dot" id="rmDot2"></div>
+            <div class="roadmap-step future">
+                <div class="roadmap-year">2학년 — 심화 학습</div>
+                <div class="roadmap-title">Unity / Unreal 엔진 입문</div>
+                <div class="roadmap-details">팀 프로젝트 참여 · XR 콘텐츠 직접 제작 · C# / C++ 학습</div>
+            </div>
+            <div class="roadmap-dot" id="rmDot3"></div>
+            <div class="roadmap-step future">
+                <div class="roadmap-year">3학년 — 실무 경험</div>
+                <div class="roadmap-title">공모전 · 인턴십 도전</div>
+                <div class="roadmap-details">XR 관련 공모전 참가 · 인턴십 경험 · 자격증 취득</div>
+            </div>
+            <div class="roadmap-dot" id="rmDot4"></div>
+            <div class="roadmap-step future">
+                <div class="roadmap-year">4학년 — 진로 확정</div>
+                <div class="roadmap-title">졸업작품 · 취업 / 대학원</div>
+                <div class="roadmap-details">졸업작품 완성 · 최종 포트폴리오 정리 · 진로 결정</div>
+            </div>
         </div>
     </section>
 
@@ -2067,6 +2182,20 @@
             });
         }, { threshold: 0.3 });
         observer.observe(card);
+    })();
+
+    // 로드맵 점 위치 동기화
+    (() => {
+        const card = document.querySelector('.roadmap-card');
+        const dots = card.querySelectorAll('.roadmap-dot');
+        const steps = card.querySelectorAll('.roadmap-step');
+        function positionDots() {
+            steps.forEach((step, i) => {
+                if (dots[i]) dots[i].style.top = (step.offsetTop + 22) + 'px';
+            });
+        }
+        positionDots();
+        window.addEventListener('resize', positionDots);
     })();
 
     // 연표
