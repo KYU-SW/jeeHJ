@@ -1161,10 +1161,8 @@
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--primary-color);
-            min-width: 50px;
-            text-align: center;
-            align-self: flex-end;
-            margin-bottom: 2px;
+            min-width: 35px;
+            text-align: right;
         }
 
         .jlpt-track {
@@ -1244,15 +1242,6 @@
             margin-left: 2px;
             vertical-align: text-bottom;
             animation: blink 0.8s infinite;
-        }
-@keyframes smileBounce {
-            0% { transform: scale(1) rotate(0deg); }
-            15% { transform: scale(1.3) rotate(18deg); }
-            30% { transform: scale(1.3) rotate(8deg); }
-            45% { transform: scale(1.3) rotate(20deg); }
-            60% { transform: scale(1.3) rotate(6deg); }
-            75% { transform: scale(1.3) rotate(16deg); }
-            100% { transform: scale(1) rotate(0deg); }
         }
         @keyframes blink {
             0%, 100% { opacity: 1; }
@@ -1424,132 +1413,6 @@
             border-color: #ccc;
         }
 
-        /* TMI 캐러셀 */
-        .tmi-carousel {
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            height: 160px;
-        }
-        .tmi-slide {
-            position: absolute;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid var(--primary-light);
-            padding: 2rem 2.5rem;
-            text-align: center;
-            min-height: 130px;
-            width: 280px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            cursor: pointer;
-        }
-        .tmi-slide.center {
-            z-index: 3;
-            transform: scale(1);
-            opacity: 1;
-        }
-        .tmi-slide.left {
-            z-index: 2;
-            transform: translateX(-180px) scale(0.85);
-            opacity: 0.5;
-        }
-        .tmi-slide.right {
-            z-index: 2;
-            transform: translateX(180px) scale(0.85);
-            opacity: 0.5;
-        }
-        .tmi-slide.hidden {
-            z-index: 0;
-            transform: scale(0.7);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .tmi-label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.4rem;
-        }
-        .tmi-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        .tmi-dots {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 1rem;
-        }
-        .tmi-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            transition: var(--transition);
-        }
-        .tmi-dot.active {
-            background: var(--primary-color);
-            width: 20px;
-            border-radius: 4px;
-        }
-
-        /* 명언 */
-        .quote-card {
-            max-width: 800px;
-            margin: 1.5rem auto 0;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid var(--primary-light);
-            padding: 1.5rem 2rem;
-            text-align: center;
-            position: relative;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .quote-text {
-            font-size: 1rem;
-            color: var(--text-color);
-            font-style: italic;
-            line-height: 1.7;
-            transition: opacity 0.4s ease;
-        }
-        .quote-text.fade { opacity: 0; }
-        .quote-author {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 0.5rem;
-            transition: opacity 0.4s ease;
-        }
-        .quote-author.fade { opacity: 0; }
-        .quote-refresh {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
-            color: var(--text-light);
-            transition: transform 0.3s;
-        }
-        .quote-refresh:hover {
-            transform: rotate(180deg);
-        }
-
         /* Activities 아코디언 스타일 */
         .activity-accordion {
             max-width: 800px;
@@ -1633,7 +1496,6 @@
         </label>
         <ul class="nav-links">
         <li><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
-        <li><a href="#tmi"><i class="fa-solid fa-face-smile"></i> About Me</a></li>
         <li><a href="#vision"><i class="fa-solid fa-eye"></i> Vision</a></li>
         <li><a href="#courses"><i class="fa-solid fa-book"></i> Courses</a></li>
         <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
@@ -1671,13 +1533,6 @@
 </header>
 
 <main class="container">  
-    <!-- TMI Section -->
-    <section id="tmi">
-        <h2 class="section-title"><i class="fa-solid fa-face-smile" id="tmiSmile" style="cursor:pointer; transition: all 0.3s;"></i> About Me</h2>
-        <div class="tmi-carousel" id="tmiCarousel"></div>
-        <div class="tmi-dots" id="tmiDots"></div>
-    </section>
-
     <!-- Vision Section -->
     <section id="vision">
         <h2 class="section-title"><i class="fa-solid fa-eye"></i> Vision</h2>
@@ -1688,11 +1543,6 @@
                 어제보다 더, 오늘보다 더 나은 사람이 되기를 바랍니다.<br>
                 더 다양한것을 알고 더 발전할 줄 아는 제가 될 수 있도록 노력하겠습니다.
             </p>
-        </div>
-        <div class="quote-card" id="quoteCard">
-            <button class="quote-refresh" id="quoteRefresh" title="다른 명언">🔄</button>
-            <div class="quote-text" id="quoteText"></div>
-            <div class="quote-author" id="quoteAuthor"></div>
         </div>
     </section>
 
@@ -1771,14 +1621,6 @@
                 <div class="skill-percent">40%</div>
             </div>
             <div class="skill-row">
-                <div class="skill-icon"><i class="fa-solid fa-image" style="color:#31A8FF;"></i></div>
-                <div class="skill-info">
-                    <div class="skill-name">Adobe Photoshop</div>
-                    <div class="skill-bar"><div class="skill-fill" data-percent="100"></div></div>
-                </div>
-                <div class="skill-percent" style="font-size:0.7rem; line-height:1.3;">자격증<br>취득</div>
-            </div>
-            <div class="skill-row">
                 <div class="skill-icon"><i class="fa-solid fa-language" style="color:var(--primary-color);"></i></div>
                 <div class="skill-info">
                     <div class="skill-name">JLPT</div>
@@ -1798,7 +1640,7 @@
 
     <!-- Activities Section -->
     <section id="activities">
-        <h2 class="section-title"><i class="fa-solid fa-star" id="actStar" style="cursor:pointer; transition: transform 0.3s;"></i> Activities</h2>
+        <h2 class="section-title"><i class="fa-solid fa-star"></i> Activities</h2>
         <div class="activity-accordion">
             <details class="activity-item">
                 <summary>동아리</summary>
@@ -1844,7 +1686,7 @@
                 </div>
             </details>
             <details class="activity-item">
-                <summary>자격증/수상</summary>
+                <summary>공모전</summary>
                 <div class="activity-content">
                     <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span style="white-space: nowrap;">🏆 2026.06. 05:</span>
@@ -1870,18 +1712,6 @@
                     </div>
                 </div>
             </details>
-            <details class="activity-item">
-                <summary>이수 / 수료</summary>
-                <div class="activity-content">
-                    <div style="display: inline-flex; flex-direction: column; border-radius: 14px; overflow: hidden; border: 1px solid var(--primary-light); box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 200px;">
-                        <img src="수료증.png" alt="HUSS AI 수료증" style="width: 100%; cursor: pointer; display: block;" onclick="window.open(this.src)">
-                        <div style="padding: 10px 12px;">
-                            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">HUSS x 뤼튼 AI 융합커뮤니티</div>
-                            <div style="font-size: 0.75rem; color: var(--text-light); line-height: 1.5;">성균관대 · 뤼튼 공동 진행<br>AI 융합 프로그램 수료 (2026.06.05)</div>
-                        </div>
-                    </div>
-                </div>
-            </details>
         </div>
     </section>
 
@@ -1893,7 +1723,7 @@
             <div class="roadmap-step current">
                 <div class="roadmap-year">1학년 — 기초 다지기</div>
                 <div class="roadmap-title">🌱 지금 여기!</div>
-                <div class="roadmap-details">Python 기초 학습 · 전공 탐색 · 기초 프로젝트 경험<br>다양한 공모전, 프로젝트 등에 참여하며 진로 탐색</div>
+                <div class="roadmap-details">Python 기초 학습 · 전공 탐색 · 기초 프로젝트 경험<br>포트폴리오 제작 · 로블록스 맵 개발 · XR 콘텐츠 기획</div>
             </div>
             <div class="roadmap-dot" id="rmDot2"></div>
             <div class="roadmap-step future">
@@ -2352,219 +2182,6 @@
             });
         }, { threshold: 0.3 });
         observer.observe(card);
-    })();
-
-    // 별똥별
-    (() => {
-        const star = document.getElementById('actStar');
-        let shooting = false;
-
-        star.addEventListener('click', () => {
-            if (shooting || document.documentElement.getAttribute('data-theme') !== 'dark') return;
-            shooting = true;
-            star.style.transform = 'rotate(72deg) scale(1.3)';
-            setTimeout(() => { star.style.transform = ''; }, 400);
-
-            const cvs = document.createElement('canvas');
-            cvs.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;pointer-events:none;';
-            cvs.width = window.innerWidth;
-            cvs.height = window.innerHeight;
-            document.body.appendChild(cvs);
-            const ctx = cvs.getContext('2d');
-
-            const meteors = [];
-            const fixedAngle = Math.PI / 4;
-            for (let i = 0; i < 20; i++) {
-                meteors.push({
-                    x: -cvs.width * 0.5 + Math.random() * cvs.width * 1.1,
-                    y: -Math.random() * 300 - 50,
-                    speed: 5 + Math.random() * 8,
-                    len: 100 + Math.random() * 160,
-                    angle: fixedAngle,
-                    opacity: 0.7 + Math.random() * 0.3,
-                    delay: i * 120,
-                    started: false,
-                    done: false,
-                    size: 1.5 + Math.random() * 2.5
-                });
-            }
-
-            let glowOpacity = 0;
-            const startTime = Date.now();
-            let meteorsDone = false;
-            function draw() {
-                ctx.clearRect(0, 0, cvs.width, cvs.height);
-                const now = Date.now();
-                let allDone = true;
-
-                if (!meteorsDone) glowOpacity = Math.min(0.15, glowOpacity + 0.01);
-                else glowOpacity = Math.max(0, glowOpacity - 0.008);
-                if (glowOpacity > 0) {
-                    const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, cvs.width * 0.7);
-                    glow.addColorStop(0, 'rgba(180, 210, 255, ' + glowOpacity + ')');
-                    glow.addColorStop(0.5, 'rgba(140, 180, 240, ' + glowOpacity * 0.3 + ')');
-                    glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                    ctx.fillStyle = glow;
-                    ctx.fillRect(0, 0, cvs.width, cvs.height);
-                }
-
-                meteors.forEach(m => {
-                    if (now - startTime < m.delay) { allDone = false; return; }
-                    if (!m.started) { m.started = true; m.startTime = now; }
-                    if (m.done) return;
-                    allDone = false;
-
-                    const elapsed = now - m.startTime;
-                    const dx = Math.cos(m.angle) * m.speed;
-                    const dy = Math.sin(m.angle) * m.speed;
-                    m.x += dx;
-                    m.y += dy;
-
-                    if (m.y > cvs.height + 100) { m.done = true; return; }
-
-                    const fadeOut = Math.max(0, m.opacity - elapsed * 0.0003);
-                    const tailX = m.x - Math.cos(m.angle) * m.len;
-                    const tailY = m.y - Math.sin(m.angle) * m.len;
-
-                    const grad = ctx.createLinearGradient(tailX, tailY, m.x, m.y);
-                    grad.addColorStop(0, 'rgba(180, 210, 255, 0)');
-                    grad.addColorStop(0.7, 'rgba(200, 220, 255, ' + fadeOut * 0.5 + ')');
-                    grad.addColorStop(1, 'rgba(255, 255, 255, ' + fadeOut + ')');
-
-                    ctx.beginPath();
-                    ctx.moveTo(tailX, tailY);
-                    ctx.lineTo(m.x, m.y);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = m.size;
-                    ctx.lineCap = 'round';
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.arc(m.x, m.y, m.size + 1, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 255, 255, ' + fadeOut + ')';
-                    ctx.fill();
-                });
-
-                meteorsDone = allDone;
-                if (allDone && glowOpacity <= 0) {
-                    cvs.remove();
-                    shooting = false;
-                } else {
-                    requestAnimationFrame(draw);
-                }
-            }
-            requestAnimationFrame(draw);
-        });
-    })();
-
-    // TMI 스마일
-    (() => {
-        const smile = document.getElementById('tmiSmile');
-        smile.addEventListener('click', () => {
-            smile.classList.remove('fa-face-smile');
-            smile.classList.add('fa-face-laugh-beam');
-            smile.style.animation = 'smileBounce 0.8s ease';
-            smile.addEventListener('animationend', () => {
-                smile.style.animation = '';
-                setTimeout(() => {
-                    smile.classList.remove('fa-face-laugh-beam');
-                    smile.classList.add('fa-face-smile');
-                }, 300);
-            }, { once: true });
-        });
-    })();
-
-    // TMI 캐러셀
-    (() => {
-        const items = [
-            { label: 'MBTI', value: 'INFP' },
-            { label: '생년월일', value: '2007.10.15' },
-            { label: '취미', value: '노래듣기, 산책, 게임' },
-            { label: '좋아하는 음식', value: '회, 김치볶음밥' },
-            { label: '좋아하는 색', value: '파란색 💙 노란색 💛' },
-            { label: '좌우명', value: '흘러가는대로 살자' },
-        ];
-        const carousel = document.getElementById('tmiCarousel');
-        const dotsEl = document.getElementById('tmiDots');
-        let idx = 0;
-
-        items.forEach((item, i) => {
-            const slide = document.createElement('div');
-            slide.className = 'tmi-slide hidden';
-            slide.innerHTML = '<div class="tmi-label">' + item.label + '</div><div class="tmi-value">' + item.value + '</div>';
-            slide.addEventListener('click', () => {
-                const pos = getPos(i);
-                if (pos === 'left') go(-1);
-                else if (pos === 'right') go(1);
-            });
-            carousel.appendChild(slide);
-        });
-
-        dotsEl.innerHTML = items.map((_, i) => '<div class="tmi-dot' + (i === 0 ? ' active' : '') + '"></div>').join('');
-        const dots = dotsEl.querySelectorAll('.tmi-dot');
-        const slides = carousel.querySelectorAll('.tmi-slide');
-
-        function getPos(i) {
-            const diff = (i - idx + items.length) % items.length;
-            if (diff === 0) return 'center';
-            if (diff === 1) return 'right';
-            if (diff === items.length - 1) return 'left';
-            return 'hidden';
-        }
-
-        function update() {
-            slides.forEach((s, i) => {
-                s.className = 'tmi-slide ' + getPos(i);
-            });
-            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-        }
-
-        function go(dir) {
-            idx = (idx + dir + items.length) % items.length;
-            update();
-        }
-
-        update();
-    })();
-
-    // 명언
-    (() => {
-        const quotes = [
-            { text: '성공은 매일 반복한 작은 노력들의 합이다.', author: '로버트 콜리어' },
-            { text: '꿈을 이루고 싶다면, 먼저 꿈에서 깨어나라.', author: 'J.M. 파워' },
-            { text: '오늘 할 수 있는 일에 최선을 다하라.', author: '아이작 뉴턴' },
-            { text: '배움에는 끝이 없다.', author: '공자' },
-            { text: '실패는 성공의 어머니이다.', author: '토마스 에디슨' },
-            { text: '작은 기회로부터 종종 위대한 업적이 시작된다.', author: '데모스테네스' },
-            { text: '미래는 현재 우리가 무엇을 하느냐에 달려있다.', author: '마하트마 간디' },
-            { text: '할 수 있다고 믿으면, 이미 반은 이룬 것이다.', author: '시어도어 루스벨트' },
-            { text: '멈추지 않는 한, 얼마나 천천히 가는지는 문제가 되지 않는다.', author: '공자' },
-            { text: '노력은 배신하지 않는다.', author: '작자 미상' },
-        ];
-        const textEl = document.getElementById('quoteText');
-        const authorEl = document.getElementById('quoteAuthor');
-        let qi = Math.floor(Math.random() * quotes.length);
-
-        function showQuote() {
-            const q = quotes[qi];
-            textEl.textContent = '"' + q.text + '"';
-            authorEl.textContent = '— ' + q.author;
-        }
-
-        function nextQuote() {
-            textEl.classList.add('fade');
-            authorEl.classList.add('fade');
-            setTimeout(() => {
-                qi = (qi + 1) % quotes.length;
-                showQuote();
-                textEl.classList.remove('fade');
-                authorEl.classList.remove('fade');
-            }, 400);
-        }
-
-        showQuote();
-        document.getElementById('quoteRefresh').addEventListener('click', nextQuote);
-        setInterval(nextQuote, 10000);
     })();
 
     // 로드맵 점 위치 동기화
